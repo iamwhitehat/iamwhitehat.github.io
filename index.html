@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Portfolio Blog</title>
+    <title>AI Portfolio</title>
     <link rel="stylesheet" href="styles.css">
     <script src="scripts.js" defer></script>
 </head>
@@ -11,36 +11,70 @@
     <header>
         <nav>
             <ul>
-                <li><a href="index.html#home">Home</a></li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#projects">Projects</a></li>
-                <li><a href="index.html#contact">Contact</a></li>
-                <li><a href="blog.html">Blog</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <section id="blog">
-            <h1>AI Portfolio Blog</h1>
-            <input type="text" id="search" placeholder="Search blog posts..." onkeyup="searchPosts()">
-            <div id="posts">
-                <!-- Blog Post Template -->
-                <article class="post">
-                    <img src="https://via.placeholder.com/800x400" alt="Understanding AI and Machine Learning">
-                    <h2>Understanding AI and Machine Learning</h2>
-                    <p>Published on January 1, 2024</p>
-                    <p>Artificial Intelligence (AI) and Machine Learning (ML) are rapidly evolving fields...</p>
-                    <a href="#">Read more</a>
-                </article>
-                <article class="post">
-                    <img src="https://via.placeholder.com/800x400" alt="The Future of AI in Healthcare">
-                    <h2>The Future of AI in Healthcare</h2>
-                    <p>Published on February 15, 2024</p>
-                    <p>AI is transforming healthcare by enabling faster diagnostics...</p>
-                    <a href="#">Read more</a>
-                </article>
-                <!-- More blog posts can be added here -->
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <h1>Unleashing the Power of AI</h1>
+            <p>Transforming Ideas into Reality with Cutting-Edge AI and Machine Learning Solutions</p>
+            <a href="#projects" class="cta-button">Explore My Projects</a>
+        </section>
+        <!-- About Me Section -->
+        <section id="about">
+            <h2>Who Am I?</h2>
+            <p>I am a visionary AI expert passionate about harnessing the potential of machine learning to revolutionize industries. With a strong background in computer science and hands-on experience in AI-driven projects, I strive to create solutions that make a real impact.</p>
+            <img src="https://via.placeholder.com/150" alt="Profile Picture">
+        </section>
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2>Innovative Projects</h2>
+            <div class="project">
+                <h3>AI-Powered Healthcare</h3>
+                <p>Revolutionizing patient care with predictive analytics and personalized treatment plans.</p>
             </div>
+            <div class="project">
+                <h3>Smart Home Assistant</h3>
+                <p>Enhancing everyday living with an intelligent, voice-activated assistant.</p>
+            </div>
+        </section>
+        <!-- Blog Preview Section -->
+        <section id="blog">
+            <h2>Insights and Innovations</h2>
+            <div class="post">
+                <h3><a href="#">Decoding AI: A Beginner's Guide</a></h3>
+                <p>Published on January 1, 2024</p>
+                <p>Unlock the secrets of AI and machine learning with this comprehensive guide.</p>
+            </div>
+            <div class="post">
+                <h3><a href="#">AI in Healthcare: The Future is Now</a></h3>
+                <p>Published on February 15, 2024</p>
+                <p>Discover how AI is transforming healthcare and what it means for the future.</p>
+            </div>
+        </section>
+        <!-- AI Chatbot Section -->
+        <section id="chatbot">
+            <h2>AI Chatbot</h2>
+            <p>Experience my AI skills firsthand by interacting with my chatbot. Ask it anything!</p>
+            <div id="chat-container">
+                <div id="chat-window">
+                    <div id="output"></div>
+                    <input id="user-input" type="text" placeholder="Type your message here...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </section>
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Get in Touch</h2>
+            <p>Have a project in mind or just want to chat? Let's connect and explore the possibilities of AI together.</p>
+            <a href="mailto:your.email@example.com" class="cta-button">Contact Me</a>
         </section>
     </main>
     <footer>

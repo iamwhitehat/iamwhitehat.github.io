@@ -48,25 +48,56 @@ main {
     padding: 100px 20px 20px; /* Adjusted for fixed header */
 }
 
-section {
-    margin: 60px 0;
-    position: relative;
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #1f1f1f, #292929);
 }
 
-h1, h2 {
-    font-family: 'Helvetica Neue', sans-serif;
-    margin-bottom: 20px;
+.hero h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
+.hero p {
+    font-size: 18px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #00ffcc;
+    color: #121212;
+    text-decoration: none;
+    font-weight: bold;
     border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.post {
+.cta-button:hover {
+    background-color: #ffffff;
+    color: #121212;
+}
+
+/* About Section */
+#about {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #1f1f1f;
+}
+
+#about img {
+    border-radius: 50%;
+    margin-top: 20px;
+}
+
+/* Projects Section */
+#projects {
+    padding: 50px 20px;
+}
+
+.project {
     background-color: #292929;
     padding: 20px;
     margin-bottom: 20px;
@@ -74,44 +105,111 @@ input[type="text"] {
     transition: transform 0.3s;
 }
 
-.post img {
-    width: 100%;
-    border-radius: 8px;
-}
-
-.post:hover {
+.project:hover {
     transform: scale(1.02);
 }
 
-.post h2 {
+.project h3 {
     font-size: 24px;
     margin-bottom: 10px;
 }
 
-.post p {
+.project p {
     font-size: 16px;
-    margin-bottom: 10px;
 }
 
-.post a {
+/* Blog Section */
+#blog {
+    padding: 50px 20px;
+    background-color: #1f1f1f;
+}
+
+.post {
+    margin-bottom: 20px;
+}
+
+.post h3 a {
+    color: #00ffcc;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.post h3 a:hover {
+    color: #ffffff;
+}
+
+/* Chatbot Section */
+#chatbot {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #292929;
+}
+
+#chat-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#chat-window {
+    border: 2px solid #00ffcc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #1f1f1f;
+    color: #ffffff;
+}
+
+#output {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+#user-input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #00ffcc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#chat-container button {
+    padding: 10px 20px;
+    background-color: #00ffcc;
+    color: #121212;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#chat-container button:hover {
+    background-color: #ffffff;
+    color: #121212;
+}
+
+/* Contact Section */
+#contact {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+#contact a {
     color: #00ffcc;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
 }
 
-.post a:hover {
+#contact a:hover {
     color: #ffffff;
 }
 
+/* Footer */
 footer {
     background-color: #1f1f1f;
     text-align: center;
     padding: 10px;
     font-size: 14px;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
 }
 
 /* Responsive Styles */
@@ -125,10 +223,11 @@ footer {
     }
 
     section {
-        margin: 80px 0;
+        padding: 20px;
     }
 
-    input[type="text"] {
-        width: 100%;
+    .cta-button {
+        display: block;
+        margin: 20px auto;
     }
 }

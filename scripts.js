@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Implement parallax effects and 3D animations
+    // Implement parallax effects
     window.addEventListener('scroll', () => {
         document.querySelectorAll('.parallax').forEach(elem => {
             let speed = elem.getAttribute('data-speed');
@@ -32,4 +32,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('JavaScript is running');
 });
-

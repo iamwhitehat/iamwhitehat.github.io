@@ -6,12 +6,18 @@ body {
     background-color: #121212;
     color: #ffffff;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 header {
     background-color: #1f1f1f;
     padding: 20px;
     text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 nav ul {
@@ -38,21 +44,28 @@ nav ul li a:hover {
 }
 
 main {
-    padding: 20px;
+    padding: 100px 20px 20px; /* Adjusted for fixed header */
 }
 
 section {
-    margin: 40px 0;
+    margin: 60px 0;
+    position: relative;
 }
 
 h1, h2 {
     font-family: 'Helvetica Neue', sans-serif;
+    margin-bottom: 20px;
 }
 
 .project {
     background-color: #292929;
     padding: 20px;
     border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.project:hover {
+    transform: scale(1.05);
 }
 
 footer {
@@ -60,6 +73,38 @@ footer {
     text-align: center;
     padding: 10px;
     font-size: 14px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.geometric-shape {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: rgba(0, 255, 204, 0.2);
+    border: 2px solid #00ffcc;
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+#about .geometric-shape {
+    top: -50px;
+    right: -50px;
+}
+
+#projects .geometric-shape {
+    bottom: -50px;
+    left: -50px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -84,5 +129,9 @@ footer {
 
     nav ul li {
         margin: 10px 0;
+    }
+
+    section {
+        margin: 80px 0;
     }
 }

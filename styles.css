@@ -1,3 +1,4 @@
+/* General Styles */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
@@ -57,15 +58,50 @@ h1, h2 {
     margin-bottom: 20px;
 }
 
-.project {
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.post {
     background-color: #292929;
     padding: 20px;
+    margin-bottom: 20px;
     border-radius: 8px;
     transition: transform 0.3s;
 }
 
-.project:hover {
-    transform: scale(1.05);
+.post img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.post:hover {
+    transform: scale(1.02);
+}
+
+.post h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.post p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.post a {
+    color: #00ffcc;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.post a:hover {
+    color: #ffffff;
 }
 
 footer {
@@ -78,50 +114,7 @@ footer {
     bottom: 0;
 }
 
-.geometric-shape {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background: rgba(0, 255, 204, 0.2);
-    border: 2px solid #00ffcc;
-    border-radius: 50%;
-    animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-#about .geometric-shape {
-    top: -50px;
-    right: -50px;
-}
-
-#projects .geometric-shape {
-    bottom: -50px;
-    left: -50px;
-}
-
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #121212;
-        color: #ffffff;
-    }
-
-    header, footer {
-        background-color: #1f1f1f;
-    }
-
-    .project {
-        background-color: #292929;
-    }
-}
-
+/* Responsive Styles */
 @media (max-width: 768px) {
     nav ul {
         flex-direction: column;
@@ -133,5 +126,9 @@ footer {
 
     section {
         margin: 80px 0;
+    }
+
+    input[type="text"] {
+        width: 100%;
     }
 }

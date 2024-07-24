@@ -4,104 +4,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Portfolio</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div class="logo">AI Portfolio</div>
-            <input type="text" class="search-bar" placeholder="Search...">
-            <video class="header-video" autoplay muted loop>
-                <source src="https://iamwhitehat.github.io/724806_Figure%20Dance%20Lines%203d_By_Jmg-visuals_Artlist_HD.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+    <!-- Header Section -->
+    <header class="position-relative">
+        <video class="header-video" autoplay muted loop>
+            <source src="https://iamwhitehat.github.io/724806_Figure%20Dance%20Lines%203d_By_Jmg-visuals_Artlist_HD.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="header-content container text-center text-white">
+            <div class="logo my-3">AI Portfolio</div>
+            <input type="text" class="form-control w-50 mx-auto" placeholder="Search...">
         </div>
     </header>
-    <nav>
-        <ul class="nav-menu">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Portfolio</a></li>
-            <li><a href="#">Best AI Tools</a></li>
-            <li><a href="#">Blog</a></li>
-        </ul>
+
+    <!-- Navigation Menu -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">AI Portfolio</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Portfolio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Best AI Tools</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <main>
-        <section class="main-section">
-            <img src="ai-future.jpg" alt="AI Future" class="main-image">
-            <h1>Shaping the Future with AI Innovation</h1>
-            <button class="cta-button">Explore My Work</button>
-        </section>
-        <section class="best-ai-tools">
-            <h2>Best AI Tools</h2>
-            <div class="tool">
-                <img src="tool1.jpg" alt="Tool 1">
-                <h3>Tool 1</h3>
-                <p>Brief description of Tool 1.</p>
-                <a href="#">Learn More</a>
-                <p class="testimonial">User testimonial.</p>
-            </div>
-            <div class="tool">
-                <img src="tool2.jpg" alt="Tool 2">
-                <h3>Tool 2</h3>
-                <p>Brief description of Tool 2.</p>
-                <a href="#">Learn More</a>
-                <p class="testimonial">User testimonial.</p>
-            </div>
-            <!-- Add more tools as needed -->
-        </section>
-        <section class="featured-prompts">
-            <h2>Featured Prompts</h2>
-            <div class="prompt">
-                <h3>Prompt 1</h3>
-                <p>Brief description of Prompt 1.</p>
-                <a href="#">Details</a>
-                <button class="cta-button">Read More</button>
-            </div>
-            <div class="prompt">
-                <h3>Prompt 2</h3>
-                <p>Brief description of Prompt 2.</p>
-                <a href="#">Details</a>
-                <button class="cta-button">Read More</button>
-            </div>
-            <!-- Add more prompts as needed -->
-        </section>
+
+    <!-- Main Section -->
+    <main class="py-5 text-center text-white" style="background-image: url('ai-future.jpg'); background-size: cover;">
+        <div class="container">
+            <h1 class="display-4">Shaping the Future with AI Innovation</h1>
+            <a href="#" class="btn btn-primary btn-lg mt-3">Explore My Work</a>
+        </div>
     </main>
-    <footer>
-        <div class="footer-links">
-            <a href="#">Home</a>
-            <a href="#">Contact</a>
-            <a href="#">Portfolio</a>
-            <a href="#">Best AI Tools</a>
-            <a href="#">Blog</a>
+
+    <!-- Best AI Tools Section -->
+    <section class="best-ai-tools py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Best AI Tools</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="tool1.jpg" class="card-img-top" alt="Tool 1">
+                        <div class="card-body">
+                            <h5 class="card-title">Tool 1</h5>
+                            <p class="card-text">Brief description of Tool 1.</p>
+                            <a href="#" class="btn btn-outline-primary">Learn More</a>
+                            <p class="testimonial mt-2">User testimonial.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat similar blocks for other tools -->
+            </div>
         </div>
-        <div class="social-media">
-            <a href="#">Twitter</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">GitHub</a>
-        </div>
-        <p>&copy; 2024 AI Portfolio. All rights reserved.</p>
-        <div class="contact-info">
-            <p>Email: contact@aiportfolio.com</p>
-        </div>
-        <form class="newsletter">
-            <label for="newsletter-email">Sign up for our newsletter:</label>
-            <input type="email" id="newsletter-email" placeholder="Enter your email">
-            <button type="submit">Subscribe</button>
-        </form>
-    </footer>
-    <section class="faq">
-        <h2>FAQ</h2>
-        <div class="faq-item">
-            <h3>Question 1</h3>
-            <p>Answer to question 1.</p>
-        </div>
-        <div class="faq-item">
-            <h3>Question 2</h3>
-            <p>Answer to question 2.</p>
-        </div>
-        <!-- Add more FAQs as needed -->
     </section>
+
+    <!-- Featured Prompts Section -->
+    <section class="featured-prompts py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">Featured Prompts</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Prompt 1</h5>
+                            <p class="card-text">Brief description of Prompt 1.</p>
+                            <a href="#" class="btn btn-outline-primary">Details</a>
+                            <a href="#" class="btn btn-primary mt-2">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat similar blocks for other prompts -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">FAQ</h2>
+            <div class="accordion" id="faqAccordion">
+                <div class="card">
+                    <div class="card-header" id="faqHeading1">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                                Question 1
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="faqCollapse1" class="collapse show" aria-labelledby="faqHeading1" data-parent="#faqAccordion">
+                        <div class="card-body">
+                            Answer to question 1.
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat similar blocks for other FAQs -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Home</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                        <li><a href="#" class="text-white">Portfolio</a></li>
+                        <li><a href="#" class="text-white">Best AI Tools</a></li>
+                        <li><a href="#" class="text-white">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Follow Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Twitter</a></li>
+                        <li><a href="#" class="text-white">LinkedIn</a></li>
+                        <li><a href="#" class="text-white">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact Us</h5>
+                    <p>Email: contact@aiportfolio.com</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Newsletter</h5>
+                    <form>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="newsletter-email" placeholder="Enter your email">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                &copy; 2024 AI Portfolio. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

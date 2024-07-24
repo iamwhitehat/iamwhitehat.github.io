@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Portfolio</title>
+    <title>AI Portfolio Blog</title>
     <link rel="stylesheet" href="styles.css">
     <script src="scripts.js" defer></script>
 </head>
@@ -11,35 +11,34 @@
     <header>
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#projects">Projects</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="blog.html">Blog</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <section id="home">
-            <h1>Welcome to My AI Portfolio</h1>
-            <p>Explore my work in AI and machine learning.</p>
-            <div class="geometric-shape"></div>
-        </section>
-        <section id="about" class="parallax" data-speed="2">
-            <h2>About Me</h2>
-            <p>Information about my background and expertise.</p>
-            <div class="geometric-shape"></div>
-        </section>
-        <section id="projects" class="parallax" data-speed="4">
-            <h2>Projects</h2>
-            <div class="project">
-                <h3>Project Title</h3>
-                <p>Description of the project.</p>
+        <section id="blog">
+            <h1>AI Portfolio Blog</h1>
+            <input type="text" id="search" placeholder="Search blog posts..." onkeyup="searchPosts()">
+            <div id="posts">
+                <!-- Blog Post Template -->
+                <article class="post">
+                    <h2>Understanding AI and Machine Learning</h2>
+                    <p>Published on January 1, 2024</p>
+                    <p>Artificial Intelligence (AI) and Machine Learning (ML) are rapidly evolving fields...</p>
+                    <a href="#">Read more</a>
+                </article>
+                <article class="post">
+                    <h2>The Future of AI in Healthcare</h2>
+                    <p>Published on February 15, 2024</p>
+                    <p>AI is transforming healthcare by enabling faster diagnostics...</p>
+                    <a href="#">Read more</a>
+                </article>
+                <!-- More blog posts can be added here -->
             </div>
-            <div class="geometric-shape"></div>
-        </section>
-        <section id="contact" class="parallax" data-speed="6">
-            <h2>Contact</h2>
-            <p>Get in touch with me.</p>
         </section>
     </main>
     <footer>

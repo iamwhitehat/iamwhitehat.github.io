@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const output = document.getElementById('output');
     const userInput = document.getElementById('user-input');
+    const sendButton = document.querySelector('#chat-container button');
 
     // Mock AI response function
     const getAIResponse = (message) => {
@@ -14,19 +15,37 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Function to send message
-    window.sendMessage = () => {
+    const sendMessage = () => {
         const message = userInput.value.trim();
         if (message) {
-            const userMessage = `<div class="message user">${message}</div>`;
-            output.innerHTML += userMessage;
+            displayMessage(message, 'user');
             userInput.value = '';
-
-            // Simulate AI response
-            setTimeout(() => {
-                const aiResponse = `<div class="message ai">${getAIResponse(message)}</div>`;
-                output.innerHTML += aiResponse;
-                output.scrollTop = output.scrollHeight;
-            }, 500);
+            generateAIResponse(message);
         }
     };
+
+    // Function to display messages
+    const displayMessage = (message, sender) => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender);
+        messageElement.innerText = message;
+        output.appendChild(messageElement);
+        output.scrollTop = output.scrollHeight;
+    };
+
+    // Function to generate AI response
+    const generateAIResponse = (message) => {
+        setTimeout(() => {
+            const aiResponse = getAIResponse(message);
+            displayMessage(aiResponse, 'ai');
+        }, 500);
+    };
+
+    // Event listeners
+    sendButton.addEventListener('click', sendMessage);
+    userInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
 });

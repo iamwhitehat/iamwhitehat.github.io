@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Patchhound Hunt Log</title>
+  <link>https://iamwhitehat.github.io/blog/</link>
+  <description>Real security bugs, real fixes, published evidence. A case file most weeks.</description>
+  <language>en</language>
+  <atom:link href="https://iamwhitehat.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+  <item>
+    <title>We found a repo farming AI agents with prompt injections</title>
+    <link>https://iamwhitehat.github.io/blog/001-bounty-farm.html</link>
+    <guid isPermaLink="true">https://iamwhitehat.github.io/blog/001-bounty-farm.html</guid>
+    <pubDate>Sat, 22 Aug 2026 14:30:00 +0000</pubDate>
+    <description><![CDATA[A "$780 bounty program" with no payment rail and README instructions written at AI agents — plus the one-line fix for the real auth bug inside.]]></description>
+  </item>
+</channel>
+</rss>

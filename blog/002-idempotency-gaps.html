@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hunt log No.002: The bounty was already claimed. We found two bugs anyway · Patchhound</title>
+<meta name="description" content="What happens when a bounty issue's headline bug is already fixed by someone else? You read the code against the acceptance criteria and find what everyone missed. Two real idempotency gaps, one PR.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="site"><div class="wrap">
+  <a class="logo" href="/">Patchhound</a>
+  <nav class="main">
+    <a href="/">Hunt log</a>
+    <a href="/services.html">Services</a>
+    <a href="/about.html">Method</a>
+    <a href="mailto:hello@patchhound.dev">Contact</a>
+  </nav>
+</div></header>
+
+<div class="wrap">
+  <div class="crumb"><a href="/">Home</a> / <a href="/blog/">hunt log</a> / No.002</div>
+
+<article class="post">
+  <span class="stamp green">PATCHED · 3/3 NEW TESTS · 35/35 EXISTING</span>
+  <h1>The bounty was already claimed. We found two bugs anyway.</h1>
+  <div class="meta">FILE No.002 · August 2026 · race conditions, payment integrity · 7 min read</div>
+
+  <p>Last week's file ended with us retuning the scanner to ignore fake bounties. This week we went hunting in the surviving candidates and hit a situation every bounty hunter eventually meets: the issue we picked, an idempotency race that could double-charge payments, had quietly been fixed by someone else while the issue stayed open.</p>
+
+  <p>The obvious move is to close the tab and pick another issue. We've learned to do something less obvious first: read the current code against the issue's acceptance criteria anyway. Maintainers merge fixes; they rarely re-audit whether the fix covered everything the issue promised.</p>
+
+  <p>It paid off twice.</p>
+
+  <h2>Gap one: the lost-race error nobody catches</h2>
+  <p>The merged fix claims keys with an SQL pattern like this:</p>
+
+<pre><code>INSERT INTO idempotency_keys (organization_id, idempotency_key, status, expires_at)
+SELECT $1, $2, 'in_progress', $3
+WHERE NOT EXISTS (
+    SELECT 1 FROM idempotency_keys
+    WHERE organization_id = $1 AND idempotency_key = $2 AND expires_at > NOW()
+);</code></pre>
+
+  <p>Looks atomic. It isn't, and the comment above it suggests the author believed it was. That WHERE clause is evaluated per transaction: two concurrent requests can both see "no existing row" before either commits. The table's UNIQUE constraint saves you from duplicate rows, rejecting the second INSERT with Postgres error 23505. But nothing in the service catches 23505. The loser of the race doesn't get the documented 409 Conflict; it gets an unhandled exception and a raw 500.</p>
+
+  <p>So the exact scenario the issue was about, two simultaneous requests with the same key, still produced a broken outcome. Just a different broken outcome than everyone was hunting for.</p>
+
+  <h2>Gap two: the response that outlives its claim</h2>
+  <p>The second gap took longer to see because it needs a timeline to spot:</p>
+  <ol style="margin:16px 0 16px 24px;color:#33312c">
+    <li>Request A claims key K at noon. The claim expires in 24 hours... normally.</li>
+    <li>Request A hangs (cold start, slow dependency). Its key expires at noon next day.</li>
+    <li>Request B arrives, sees the expired row, re-claims it per Step 2 of the claim logic, and starts processing.</li>
+    <li>Request A finally finishes and calls completeKey, which updates the row unconditionally.</li>
+  </ol>
+  <p>A's response is now stored on a claim B owns. The next replay of key K serves A's stale response to B's caller. In a payments context, cached responses are how you avoid double-charging, so a cross-contaminated cache isn't a theoretical wart; it can charge or refund the wrong amount.</p>
+
+  <p>The fix for both is small, which is typical: catch 23505 and translate it into the conflict error the middleware already maps to 409, and add <code>expires_at &gt; NOW()</code> to the completion updates so a finished request can only write to a claim it still owns.</p>
+
+<pre><code>- WHERE organization_id = $1 AND idempotency_key = $2
++ WHERE organization_id = $1 AND idempotency_key = $2
++   AND expires_at &gt; NOW()</code></pre>
+
+  <h2>The gate catches us too</h2>
+  <p>Honesty section, because it's the part most writeups skip. During triage we flagged a third bug: cleanupExpired looked like dead code, defined but never called. Before shipping we grepped the entrypoint file and found it wired to an hourly interval. Our triage note was wrong. We corrected it before the pull request went out rather than shipping a false claim to the maintainer.</p>
+
+  <p>This is why the process has five levels instead of one. The gate exists because confident wrong findings are worse than no findings, and confidence is not evidence. Every number below came from a command run during this session:</p>
+
+  <ul style="margin:16px 0 16px 24px;color:#33312c;line-height:1.9">
+    <li>New regression tests against unpatched code: <strong>1 of 3 passed</strong></li>
+    <li>Same tests with the fix: <strong>3 of 3 passed</strong></li>
+    <li>Existing idempotency suites after the change: <strong>35 of 35 passed</strong></li>
+    <li>Full backend suite baseline on clean main: 122 pre-existing failures, verified identical without our patch, zero overlap with this code</li>
+  </ul>
+
+  <h2>The meta-lesson for bounty hunters</h2>
+  <p>"Already fixed" issues are not dead issues. The issue tracker records intent; the merged code records what actually happened, and those diverge more often than anyone audits. When a candidate turns out claimed, spend twenty minutes diffing the issue's acceptance criteria against the merged code. You're reading with better questions than the person who wrote the fix, because you arrived skeptical.</p>
+
+  <p>The full pull request with tests is public: <a href="https://github.com/Protocol-Guild/PayD/pull/599">Protocol-Guild/PayD#599</a>. No bounty attached to this one; it's portfolio work. The two files published here cost us maybe three hours total and now answer the question every potential client silently asks: can these people actually do it?</p>
+
+  <div class="pager">
+    <a href="/blog/001-bounty-farm.html">← No.001: repo farming AI agents</a>
+    <span style="color:var(--pencil)">No.002</span>
+  </div>
+</article>
+
+<section class="block">
+  <p><strong>Payments taking duplicates? Forms submitting twice?</strong> Race conditions like these are exactly what a tune-up hunts. <a href="/services.html">€490 flat, evidence included</a>.</p>
+</section>
+
+</div>
+
+<footer class="site"><div class="wrap">
+  <span><strong>Patchhound.</strong> We hunt, we patch, you sleep.</span>
+  <span><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a></span>
+</div></footer>
+
+</body>
+</html>

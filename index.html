@@ -34,6 +34,13 @@
 <div class="secline"><span class="tab">Hunt log</span></div>
 <section class="block" id="log">
 
+
+  <a class="case" href="/blog/002-idempotency-gaps.html">
+    <div class="row"><span class="no">FILE No.002</span><span class="stamp green">PATCHED</span></div>
+    <h3>The bounty was already claimed. We found two bugs anyway.</h3>
+    <p class="sum">An idempotency race with a merged fix still had two real gaps: a lost-race error surfacing as a raw 500, and responses outliving their claims. Reading acceptance criteria against shipped code pays.</p>
+    <div class="meta">race conditions · payment integrity · postgres · Aug 2026</div>
+  </a>
   <a class="case" href="/blog/001-bounty-farm.html">
     <div class="row"><span class="no">FILE No.001</span><span class="stamp green">PATCHED</span></div>
     <h3>We found a repo farming AI agents with prompt injections</h3>

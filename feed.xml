@@ -13,5 +13,12 @@
     <pubDate>Sat, 22 Aug 2026 14:30:00 +0000</pubDate>
     <description><![CDATA[A "$780 bounty program" with no payment rail and README instructions written at AI agents — plus the one-line fix for the real auth bug inside.]]></description>
   </item>
+  <item>
+    <title>The bounty was already claimed. We found two bugs anyway.</title>
+    <link>https://iamwhitehat.github.io/blog/002-idempotency-gaps.html</link>
+    <guid isPermaLink="true">https://iamwhitehat.github.io/blog/002-idempotency-gaps.html</guid>
+    <pubDate>Sat, 22 Aug 2026 18:00:00 +0000</pubDate>
+    <description><![CDATA[A merged fix left two real idempotency gaps: unhandled lost-race errors and responses outliving their claims. How acceptance-criteria auditing finds what everyone missed.]]></description>
+  </item>
 </channel>
 </rss>

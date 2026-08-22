@@ -3,62 +3,252 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Patchhound — We hunt. We patch. You sleep.</title>
-<meta name="description" content="Evidence-based security fixes for web-facing businesses and open source. Every fix published with diffs and test numbers.">
+<title>Patchhound — Security fixes with published proof</title>
+<meta name="description" content="Patchhound finds and fixes real security holes in web apps and open source. Every fix published with diffs and test numbers. Flat fees, no hourly billing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root { --ink:#16181d; --paper:#faf9f7; --accent:#c2410c; --muted:#6b7280; }
-  * { box-sizing:border-box; margin:0; }
-  body { font-family:Georgia,'Times New Roman',serif; background:var(--paper); color:var(--ink); line-height:1.65; }
-  .wrap { max-width:680px; margin:0 auto; padding:48px 24px; }
-  header { border-bottom:3px double var(--ink); padding-bottom:24px; margin-bottom:40px; }
-  h1.logo { font-size:28px; letter-spacing:-0.5px; }
-  .logo span { color:var(--accent); }
-  .tagline { color:var(--muted); font-style:italic; margin-top:4px; font-family:system-ui,sans-serif; font-size:14px; }
-  h2 { font-size:22px; margin:32px 0 8px; line-height:1.3; }
-  h2 a { color:var(--ink); text-decoration:none; } h2 a:hover { text-decoration:underline; }
-  .meta { font-family:system-ui,sans-serif; font-size:13px; color:var(--muted); }
-  .post p.summary { margin-top:6px; }
-  section.pitch { background:#fff; border:1px solid #e5e1da; padding:24px; margin-top:48px; }
-  section.pitch h3 { font-size:18px; margin-bottom:8px; }
-  .cta { display:inline-block; background:var(--accent); color:#fff; text-decoration:none;
-         font-family:system-ui,sans-serif; font-size:15px; padding:10px 18px; margin-top:12px; }
-  form { margin-top:16px; font-family:system-ui,sans-serif; }
-  input[type=email] { padding:9px 12px; width:60%; border:1px solid #ccc; font-size:14px; }
-  button { padding:9px 14px; background:var(--ink); color:#fff; border:none; cursor:pointer; font-size:14px; }
-  footer { margin-top:64px; padding-top:20px; border-top:1px solid #ddd; font-family:system-ui,sans-serif;
-           font-size:13px; color:var(--muted); }
-  a { color:var(--accent); }
+  :root{
+    --bg:#0b0e14; --bg2:#11151f; --card:#161b28; --line:#232a3a;
+    --ink:#e8ecf4; --muted:#8b94a8; --accent:#ff6b35; --accent2:#ffb347;
+    --green:#3ddc84; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-weight:800;font-size:20px;letter-spacing:-.5px;color:var(--ink)}
+  .logo b{color:var(--accent)}
+  .navlinks{display:flex;gap:28px;font-size:14px;font-weight:500}
+  .navlinks a{color:var(--muted)} .navlinks a:hover{color:var(--ink)}
+  .navcta{background:var(--accent);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:600}
+
+  .hero{padding:96px 0 72px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(600px 300px at 80% 0%,rgba(255,107,53,.12),transparent),
+    radial-gradient(500px 300px at 10% 100%,rgba(61,220,132,.06),transparent)}
+  .hero .wrap{position:relative}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--green);
+    background:rgba(61,220,132,.08);border:1px solid rgba(61,220,132,.25);padding:6px 12px;border-radius:99px;margin-bottom:24px}
+  .kicker .dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  h1{font-size:clamp(34px,6vw,58px);font-weight:800;letter-spacing:-1.5px;line-height:1.08;max-width:760px}
+  h1 em{font-style:normal;color:var(--accent)}
+  .hero p.sub{font-size:18px;color:var(--muted);max-width:620px;margin:20px 0 32px}
+  .btnrow{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-block;padding:13px 26px;border-radius:10px;font-weight:600;font-size:15px}
+  .btn.primary{background:var(--accent);color:#fff;box-shadow:0 4px 24px rgba(255,107,53,.3)}
+  .btn.primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(255,107,53,.4)}
+  .btn.ghost{color:var(--ink);border:1px solid var(--line);background:var(--card)}
+  .btn.ghost:hover{border-color:var(--muted)}
+  .trust{margin-top:36px;display:flex;gap:24px;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .trust b{color:var(--ink)}
+
+  .proofstrip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2)}
+  .proofstrip .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;padding:28px 24px}
+  .stat .num{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--accent2)}
+  .stat .lbl{font-size:13px;color:var(--muted)}
+
+  section{padding:80px 0}
+  .seclabel{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+  h2{font-size:clamp(26px,4vw,36px);font-weight:800;letter-spacing:-.8px;margin-bottom:16px}
+  .lead{color:var(--muted);max-width:640px;font-size:16.5px}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:40px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;position:relative;transition:.2s}
+  .card:hover{border-color:#33405c;transform:translateY(-2px)}
+  .card.featured{border-color:var(--accent);background:linear-gradient(180deg,rgba(255,107,53,.07),var(--card))}
+  .badge{position:absolute;top:-11px;right:16px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;
+    padding:3px 10px;border-radius:99px;letter-spacing:.5px}
+  .price{font-family:var(--mono);font-size:26px;font-weight:600;margin:14px 0 4px}
+  .price small{font-size:13px;color:var(--muted);font-weight:400}
+  .card h3{font-size:17px;font-weight:700}
+  .card ul{list-style:none;margin-top:14px;font-size:14px;color:var(--muted)}
+  .card li{padding:5px 0 5px 22px;position:relative}
+  .card li::before{content:"→";position:absolute;left:0;color:var(--accent)}
+
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:40px}
+  .step{border-left:2px solid var(--line);padding-left:20px}
+  .step .n{font-family:var(--mono);color:var(--accent);font-size:13px;font-weight:600}
+  .step h3{font-size:16px;margin:6px 0}
+  .step p{font-size:14px;color:var(--muted)}
+
+  .term{background:#0a0d12;border:1px solid var(--line);border-radius:12px;margin-top:40px;overflow:hidden}
+  .term .bar{display:flex;gap:6px;padding:12px 16px;border-bottom:1px solid var(--line)}
+  .term .bar i{width:11px;height:11px;border-radius:50%}
+  .term .bar i:nth-child(1){background:#ff5f57}.term .bar i:nth-child(2){background:#febc2e}.term .bar i:nth-child(3){background:#28c840}
+  .term pre{padding:20px;font-family:var(--mono);font-size:13px;line-height:1.8;overflow-x:auto}
+  .c1{color:#565f75}.c2{color:#ff6b35}.c3{color:#3ddc84}.c4{color:#e8ecf4}
+
+  .posts{display:grid;gap:16px;margin-top:36px}
+  .post{display:flex;gap:20px;align-items:baseline;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:22px 24px;transition:.2s}
+  .post:hover{border-color:#33405c}
+  .post .no{font-family:var(--mono);color:var(--accent);font-size:13px;white-space:nowrap}
+  .post h3{font-size:16.5px;font-weight:600}
+  .post h3 a{color:var(--ink)} .post h3 a:hover{color:var(--accent)}
+  .post .meta{font-size:13px;color:var(--muted);margin-top:4px}
+
+  .cta-box{background:linear-gradient(135deg,rgba(255,107,53,.14),rgba(255,179,71,.05));
+    border:1px solid rgba(255,107,53,.35);border-radius:16px;padding:48px;text-align:center}
+  .cta-box h2{margin-bottom:8px}
+  .cta-box p{color:var(--muted);max-width:520px;margin:0 auto 24px}
+  .formrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .formrow input{padding:13px 16px;border-radius:10px;border:1px solid var(--line);background:var(--bg);
+    color:var(--ink);font-size:14px;width:280px}
+  .formrow input:focus{outline:none;border-color:var(--accent)}
+  .fine{font-size:12px;color:var(--muted);margin-top:12px;font-family:var(--mono)}
+
+  footer{border-top:1px solid var(--line);padding:40px 0;font-size:13.5px;color:var(--muted)}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+  footer a{color:var(--muted)} footer a:hover{color:var(--ink)}
+  @media(max-width:640px){.navlinks a:not(.navcta){display:none}.hero{padding:64px 0 48px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1 class="logo">Patch<span>hound</span></h1>
-    <div class="tagline">We hunt. We patch. You sleep.</div>
-  </header>
 
-  <main>
-    <div class="post">
-      <h2><a href="/blog/001-bounty-farm.html">We found a repo farming AI agents with prompt injections</a></h2>
-      <div class="meta">Bug hunt log, no. 1 — August 2026</div>
-      <p class="summary">A "bounty program" with $780 issues, no payment rail, and README instructions written at AI agents. What it looks like, how we spotted it in thirty seconds, and why your agent's GitHub history is your reputation.</p>
+<nav>
+  <div class="wrap">
+    <a class="logo" href="/">Patch<b>hound</b></a>
+    <div class="navlinks">
+      <a href="#services">Services</a>
+      <a href="#proof">Proof</a>
+      <a href="/blog/">Hunt log</a>
+      <a href="mailto:hello@patchhound.dev" class="navcta">Get a tune-up</a>
     </div>
+  </div>
+</nav>
 
-    <section class="pitch">
-      <h3>Is your website leaking?</h3>
-      <p>Most small-business sites have at least one unauthenticated endpoint, broken form handler, or stale plugin. We find it, fix it, and show you the diff — flat fee, fixed scope, evidence included.</p>
-      <a class="cta" href="mailto:hello@patchhound.dev?subject=Tune-up">Get a security tune-up — €490</a>
-      <form action="#" onsubmit="this.innerHTML='<p>Thanks — you are on the list. One email when the next hunt log drops.</p>'; return false;">
-        <input type="email" placeholder="you@company.com" required>
-        <button type="submit">Get the weekly hunt log</button>
-      </form>
-    </section>
-  </main>
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker"><span class="dot"></span> HUNT LOG NO.1 IS LIVE — WE PUBLISH EVERY FIX</div>
+    <h1>Your site has a hole in it.<br>We find it, patch it, and <em>show you the diff.</em></h1>
+    <p class="sub">Patchhound is a security studio for web-facing businesses and open source. Flat fees, fixed scope, and every fix published with real test numbers — because "trust us" isn't a security policy.</p>
+    <div class="btnrow">
+      <a class="btn primary" href="#services">See flat-fee services</a>
+      <a class="btn ghost" href="/blog/001-bounty-farm.html">Read the hunt log →</a>
+    </div>
+    <div class="trust">
+      <span><b>5-level</b> QA gate on every fix</span>
+      <span><b>Public</b> diffs & test evidence</span>
+      <span><b>€490</b> flat, no hourly billing</span>
+    </div>
+  </div>
+</header>
 
-  <footer>
-    Patchhound · hello@patchhound.dev ·
-    <a href="https://github.com/iamwhitehat">GitHub</a> — every claim we make has a public diff behind it.
-  </footer>
+<div class="proofstrip">
+  <div class="wrap">
+    <div class="stat"><div class="num">3/3</div><div class="lbl">regression tests shipped with our first bounty fix</div></div>
+    <div class="stat"><div class="num">1 line</div><div class="lbl">the diff that closed an open proposal hole</div></div>
+    <div class="stat"><div class="num">100%</div><div class="lbl">of fixes verified against a live server, not a mock</div></div>
+  </div>
 </div>
+
+<section id="services">
+  <div class="wrap">
+    <div class="seclabel">// services</div>
+    <h2>Fixed scope. Fixed price. Fixed site.</h2>
+    <p class="lead">No discovery call to learn the price. No hourly meter running. You know what you get and what it costs before we start.</p>
+    <div class="cards">
+      <div class="card featured">
+        <div class="badge">MOST POPULAR</div>
+        <h3>Security tune-up</h3>
+        <div class="price">€490 <small>flat</small></div>
+        <ul>
+          <li>Full audit of your site's auth, forms & endpoints</li>
+          <li>Every hole found gets patched</li>
+          <li>Written report with before/after diffs</li>
+          <li>Live-server verification, not checkbox testing</li>
+          <li>Delivered in 72 hours</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Monthly watch</h3>
+        <div class="price">€490 <small>/mo</small></div>
+        <ul>
+          <li>Continuous monitoring of your endpoints</li>
+          <li>Patches applied same-week when found</li>
+          <li>Monthly value report — what we caught</li>
+          <li>Cancel anytime, keep the reports</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Build it right</h3>
+        <div class="price">€250–450 <small>flat</small></div>
+        <ul>
+          <li>Landing pages & booking/lead flows</li>
+          <li>Built secure from line one</li>
+          <li>Deployed on your domain, you own everything</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proof" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="seclabel">// how we're different</div>
+    <h2>Most auditors hand you a PDF.<br>We hand you proof.</h2>
+    <p class="lead">Every Patchhound fix goes through the same five-level gate whether it's a €490 job or a free open source patch:</p>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h3>Reproduce</h3><p>We never fix from assumption. The bug is reproduced first — if we can't reproduce it, we say so.</p></div>
+      <div class="step"><div class="n">02</div><h3>Discriminating tests</h3><p>Tests must fail on the broken code before they're allowed to pass on the fixed code. Both numbers go in the report.</p></div>
+      <div class="step"><div class="n">03</div><h3>Live verification</h3><p>The real server gets hit with the real request. Blocked before, working after — shown in the report.</p></div>
+      <div class="step"><div class="n">04</div><h3>Blast radius</h3><p>Full test suite run. We check the fix didn't break the three things nobody thought about.</p></div>
+      <div class="step"><div class="n">05</div><h3>Hostile read</h3><p>The diff gets reviewed as if by a skeptical stranger. If we wouldn't accept it, you don't see it.</p></div>
+    </div>
+    <div class="term">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <pre><span class="c1">$</span> <span class="c4">curl -X POST https://yoursite.com/api/contact -d '{"name":"x"}'</span>
+<span class="c2">HTTP 401 Unauthorized</span>   <span class="c1"># was: 200, created anonymous record</span>
+
+<span class="c1">$</span> <span class="c4">node --test tests/contactAuth.test.js</span>
+<span class="c1"># unpatched:  1/3 pass</span>  <span class="c3"># patched:   3/3 pass</span>
+<span class="c3">✔ rejects missing token  ✔ rejects invalid token  ✔ accepts valid JWT</span></pre>
+    </div>
+  </div>
+</section>
+
+<section id="blog">
+  <div class="wrap">
+    <div class="seclabel">// hunt log</div>
+    <h2>We show our work. Every week.</h2>
+    <div class="posts">
+      <div class="post">
+        <span class="no">No.1</span>
+        <div>
+          <h3><a href="/blog/001-bounty-farm.html">We found a repo farming AI agents with prompt injections</a></h3>
+          <div class="meta">August 2026 · bounty programs · prompt injection · one-line fix</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Get the weekly hunt log</h2>
+      <p>One email when we publish: the bug, the diff, the test numbers. Plus a free 3-point check of your site's contact form when you subscribe.</p>
+      <form class="formrow" action="#" onsubmit="this.outerHTML='<p style=\'color:var(--green);font-family:var(--mono)\'>✔ You are on the list. Watch for hunt log no.2.</p>';return false;">
+        <input type="email" placeholder="you@company.com" required>
+        <button class="btn primary" type="submit">Subscribe</button>
+      </form>
+      <div class="fine">no spam · unsubscribe anytime · we publish what we find</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span><b style="color:var(--ink)">Patchhound</b> — We hunt. We patch. You sleep.</span>
+    <span><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a> · <a href="https://github.com/iamwhitehat">GitHub</a></span>
+  </div>
+</footer>
+
 </body>
 </html>

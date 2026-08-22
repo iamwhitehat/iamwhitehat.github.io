@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Method — Patchhound</title>
+<title>Method · Patchhound</title>
 <meta name="description" content="The five-level gate every Patchhound fix passes before you see it: reproduce, discriminating tests, live verification, blast radius, hostile read.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
 
 <section class="hero" style="padding-top:28px">
   <h1>A fix isn't done when it looks right.<br>It's done when it's proven.</h1>
-  <p class="lede">Every Patchhound fix — paid client work and free open source patches alike — passes the same five-level gate. If any level fails, the work doesn't ship. This page is the whole gate; there's no hidden extra step for paying customers.</p>
+  <p class="lede">Every Patchhound fix passes the same five-level gate, paid client work and free open source patches alike. If any level fails, the work doesn't ship. This page is the whole gate; there's no hidden extra step for paying customers.</p>
 </section>
 
 <div class="secline"><span class="tab">The five levels</span></div>
@@ -36,10 +36,10 @@
   <p>We never fix from assumption. The bug gets reproduced first, against the real system. If we can't reproduce it, we tell you that instead of shipping a guess.</p>
 
   <h2 style="font-size:21px">2 · Discriminating tests</h2>
-  <p>A test that can't fail is decoration. New tests must fail on the broken code before they're allowed to pass on the fixed code — both numbers go in your report. From our first case file: <em>1 of 3 tests passed unpatched, 3 of 3 patched.</em></p>
+  <p>A test that can't fail is decoration. New tests must fail on the broken code before they're allowed to pass on the fixed code. Both numbers go in your report. From our first case file: <em>1 of 3 tests passed unpatched, 3 of 3 patched.</em></p>
 
   <h2 style="font-size:21px">3 · Live verification</h2>
-  <p>The actual server gets hit with actual requests. Blocked-before and working-after are demonstrated, not asserted. When something fails unexpectedly, we suspect our own test script before blaming the application — that rule has already saved us once.</p>
+  <p>The actual server gets hit with actual requests. Blocked-before and working-after are demonstrated, not asserted. When something fails unexpectedly, we suspect our own test script before blaming the application. That rule has already saved us once.</p>
 
   <h2 style="font-size:21px">4 · Blast radius</h2>
   <p>The full relevant test suite runs, pre-existing failures get baselined so nothing is blamed on the wrong commit, other callers of changed code get checked, and the diff is scanned for secrets before anything leaves the building.</p>
@@ -51,7 +51,7 @@
 
 <div class="secline"><span class="tab">Principles</span></div>
 <section class="block">
-  <p><strong>Evidence over claims.</strong> Every statement we make about your site traces to a command run this session. We don't fabricate results, ever — a fabricated pass is worse than an honest fail.</p>
+  <p><strong>Evidence over claims.</strong> Every statement we make about your site traces to a command run this session. We don't fabricate results, ever. A fabricated pass is worse than an honest fail.</p>
   <p><strong>Show our work.</strong> The hunt log publishes what we find in open source, including mistakes. It keeps us honest and lets you judge our quality before paying.</p>
   <p><strong>Least privilege.</strong> We ask for the minimum access needed and tell you exactly what we're asking for and why. No broad credentials, no "we'll figure it out as we go."</p>
   <p><strong>Skip beats slop.</strong> A rejected engagement costs less than an embarrassing deliverable. We say no to work we can't verify properly.</p>
@@ -64,7 +64,7 @@
 </div>
 
 <footer class="site"><div class="wrap">
-  <span><strong>Patchhound</strong> — we hunt, we patch, you sleep.</span>
+  <span><strong>Patchhound.</strong> We hunt, we patch, you sleep.</span>
   <span><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a></span>
 </div></footer>
 

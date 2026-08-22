@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patchhound Bounty Dashboard</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f05e23;      /* patchhound orange */
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+    padding: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
+  h1 { font-size: 20px; letter-spacing: 1px; }
+  h1 span { color: var(--accent); }
+  .tagline { color: var(--muted); font-size: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+  .card .value { font-size: 26px; font-weight: 700; }
+  .card .sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .good { color: var(--green); } .warn { color: var(--yellow); } .bad { color: var(--red); } .acc { color: var(--accent); }
+  section { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+  section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  td { padding: 8px; border-bottom: 1px solid #21262d; }
+  tr:last-child td { border-bottom: none; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; border: 1px solid; }
+  .badge.submitted { color: var(--yellow); border-color: var(--yellow); }
+  .badge.researching { color: var(--muted); border-color: var(--muted); }
+  .badge.replied { color: #58a6ff; border-color: #58a6ff; }
+  .badge.closed { color: var(--green); border-color: var(--green); }
+  /* progress bar */
+  .bar-wrap { background: #21262d; border-radius: 4px; height: 10px; overflow: hidden; margin-top: 8px; }
+  .bar { height: 100%; background: var(--accent); transition: width .4s; }
+  /* gate meter */
+  .gate-dots { display: flex; gap: 6px; margin-top: 6px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--border); background: #21262d; }
+  .dot.hit { background: var(--green); border-color: var(--green); }
+  footer { color: var(--muted); font-size: 11px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>&#128269;</span> PATCHHOUND <span>//</span> BOUNTY PIPELINE</h1>
+  <div class="tagline">We hunt. We patch. You sleep.</div>
+</header>
+
+<div class="grid" id="cards"></div>
+
+<section>
+  <h2>Cash Progress &mdash; <span id="goal-label"></span></h2>
+  <div class="card" style="border:none;padding:0;">
+    <div style="font-size:22px;font-weight:700;" id="cash-line"></div>
+    <div class="bar-wrap"><div class="bar" id="cash-bar"></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Validation Gate (2 closes / 60 outbound)</h2>
+  <div id="gate"></div>
+</section>
+
+<section>
+  <h2>Pipeline</h2>
+  <table>
+    <thead><tr><th>Target</th><th>Item</th><th>Value</th><th>Stage</th><th>Date</th><th>Notes</th></tr></thead>
+    <tbody id="pipe-rows"></tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Weekly Log</h2>
+  <table>
+    <thead><tr><th>Week</th><th>Outbound</th><th>PRs</th><th>Replies</th><th>Closes</th></tr></thead>
+    <tbody id="week-rows"></tbody>
+  </table>
+</section>
+
+<footer id="foot"></footer>
+
+<script>
+fetch('data.json').then(r => r.json()).then(d => {
+  const m = d.metrics, t = d.targets;
+
+  // cards
+  const cards = [
+    ['Cash Earned', '\u20ac' + m.earned_eur.toLocaleString(), '', 'good'],
+    ['Pending', '\u20ac' + m.pending_eur.toLocaleString(), '', 'warn'],
+    ['PRs Sent', m.pr_sent, 'this cycle', ''],
+    ['Replies', m.replies, '', m.replies > 0 ? 'good' : ''],
+    ['Closes', m.closes, 'target: ' + t.validation_gate_closes + '/cycle', m.closes >= t.validation_gate_closes ? 'good' : 'bad']
+  ];
+  document.getElementById('cards').innerHTML = cards.map(c =>
+    `<div class="card"><div class="label">${c[0]}</div><div class="value ${c[3]}">${c[1]}</div><div class="sub">${c[2]}</div></div>`
+  ).join('');
+
+  // cash progress
+  const pct = Math.min(100, (m.cash_eur / t.cash_goal_eur) * 100);
+  document.getElementById('goal-label').textContent = '\u20ac' + t.cash_goal_eur.toLocaleString() + ' by end of 2026';
+  document.getElementById('cash-line').innerHTML =
+    `\u20ac${m.cash_eur.toLocaleString()} <span class="muted" style="color:var(--muted);font-size:13px;">/ \u20ac${t.cash_goal_eur.toLocaleString()} (${pct.toFixed(1)}%)</span>`;
+  document.getElementById('cash-bar').style.width = pct.toFixed(2) + '%';
+
+  // validation gate dots
+  let gateHtml = '<div style="display:flex;gap:24px;flex-wrap:wrap;">';
+  gateHtml += `<div><div class="label" style="color:var(--muted);font-size:11px;">CLOSES (${m.closes}/${t.validation_gate_closes})</div><div class="gate-dots">`;
+  for (let i = 0; i < t.validation_gate_closes; i++)
+    gateHtml += `<div class="dot ${i < m.closes ? 'hit' : ''}"></div>`;
+  gateHtml += '</div></div>';
+  const outRatio = Math.round((m.pr_sent / Math.max(1, d.weeks.reduce((a,w)=>a+w.outbound,0) || t.weekly_outbound)) * 100);
+  gateHtml += `<div><div class="label" style="color:var(--muted);font-size:11px;">OUTBOUND COVERAGE</div><div class="gate-dots"><span style="font-size:18px;font-weight:700;" class="${outRatio >= 100 ? 'good' : 'warn'}">${outRatio}%</span></div></div>`;
+  gateHtml += '</div>';
+  if (m.closes < t.validation_gate_closes) {
+    gateHtml += `<div style="margin-top:10px;color:var(--red);font-size:12px;">Gate not passed: consider testing at \u20ac290 until 2 closes per 60 outbound.</div>`;
+  } else {
+    gateHtml += `<div style="margin-top:10px;color:var(--green);font-size:12px;">Gate passed: keep \u20ac490 tune-up pricing.</div>`;
+  }
+  document.getElementById('gate').innerHTML = gateHtml;
+
+  // pipeline rows
+  document.getElementById('pipe-rows').innerHTML = d.pipeline.map(p => {
+    const val = p.value_eur != null ? '\u20ac' + p.value_eur.toLocaleString() : (p.challenge || '-');
+    return `<tr>
+      <td>${p.repo}${p.program ? ' <span style="color:var(--muted)">(' + p.program + ')</span>' : ''}</td>
+      <td>${p.item || '-'}</td>
+      <td>${val}</td>
+      <td><span class="badge ${p.stage}">${p.stage}</span></td>
+      <td>${p.date || '-'}</td>
+      <td style="color:var(--muted)">${p.notes || ''}</td>
+    </tr>`;
+  }).join('');
+
+  // weekly log
+  document.getElementById('week-rows').innerHTML = d.weeks.map(w => `<tr>
+    <td>${w.week}</td><td>${w.outbound}</td><td>${w.prs}</td><td>${w.replies}</td><td>${w.closes}</td>
+  </tr>`).join('');
+
+  document.getElementById('foot').textContent = 'Data updated: ' + d.updated + ' | edit data.json to refresh';
+}).catch(e => {
+  document.body.innerHTML += '<p style="color:var(--red)">Failed to load data.json: ' + e + '</p>';
+});
+</script>
+</body>
+</html>

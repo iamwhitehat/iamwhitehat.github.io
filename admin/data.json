@@ -1,0 +1,60 @@
+{
+  "updated": "2026-08-22 18:54 UTC",
+  "targets": {
+    "cash_goal_eur": 100000,
+    "year_end": "2026-12-31",
+    "weekly_outbound": 60,
+    "validation_gate_closes": 2
+  },
+  "metrics": {
+    "cash_eur": 0,
+    "pr_sent": 2,
+    "replies": 0,
+    "closes": 0,
+    "earned_eur": 0,
+    "pending_eur": 780
+  },
+  "weeks": [
+    {
+      "week": "W34",
+      "outbound": 0,
+      "prs": 2,
+      "replies": 0,
+      "closes": 0
+    }
+  ],
+  "pipeline": [
+    {
+      "repo": "SecureBananaLabs/bug-bounty",
+      "item": "#12001",
+      "value_eur": 780,
+      "stage": "submitted",
+      "date": "2026-08-22",
+      "notes": "Open, 0 issue comments, 0 review comments"
+    },
+    {
+      "repo": "Protocol-Guild/PayD",
+      "item": "#599",
+      "value_eur": null,
+      "stage": "submitted",
+      "date": "2026-08-22",
+      "notes": "Open, 0 issue comments, 0 review comments"
+    },
+    {
+      "repo": "Turso",
+      "program": "data-bug $1k",
+      "value_eur": 1000,
+      "stage": "researching",
+      "date": "",
+      "notes": ""
+    },
+    {
+      "repo": "Prettier",
+      "challenge": "$22.5k pool",
+      "value_eur": null,
+      "stage": "researching",
+      "date": "",
+      "notes": ""
+    }
+  ]
+}

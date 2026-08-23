@@ -208,36 +208,121 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 <script>
 const $=id=>document.getElementById(id);
 const go=$('go'),urlIn=$('url'),msg=$('msg'),log=$('log'),logBody=$('logbody'),results=$('results');
+// When the scan backend is deployed, set this to its origin (e.g. 'https://scan.patchhound.dev')
+// and every visitor gets the full deep scan. Empty string means browser-only quick mode.
+const API_BASE='';
 
 function say(t,c){const d=document.createElement('div');d.innerHTML='<span class="t">['+new Date().toLocaleTimeString()+']</span> '+(c?'<span class="'+c+'">'+t+'</span>':t);logBody.parentNode.insertBefore(d,logBody);}
+
+function normalize(raw){
+  let u=raw.trim().replace(/^https?:\/\//i,'').split(/[/?#]/)[0];
+  if(!u||!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/i.test(u))return null;
+  return u.toLowerCase();
+}
+
+async function probe(url,ms){
+  const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),ms);
+  try{
+    const started=performance.now();
+    await fetch(url,{mode:'no-cors',cache:'no-store',signal:ctl.signal});
+    return {ok:true,ms:Math.round(performance.now()-started)};
+  }catch(e){return {ok:false};}
+  finally{clearTimeout(t);}
+}
+
+function renderLite(r){
+  const host=r.host,fs=r.findings;
+  const crit=fs.filter(f=>f.severity===1).length,mid=fs.filter(f=>f.severity===2).length;
+  let score,cls;
+  if(crit){score=crit+' critical issue'+(crit>1?'s':'')+' found';cls='bad';}
+  else if(mid){score='No critical issues, '+mid+' to improve';cls='mid';}
+  else{score='All checks passed';cls='good';}
+  let h='<div class="verdict"><div class="verdict-head"><h2>Checkup report — '+esc(host)+'</h2><span class="score '+cls+' mono">'+score+'</span></div>';
+  if(!fs.length){
+    h+='<div class="finding"><span class="f-tag sev-good" style="color:var(--green)">Pass</span><div class="f-title"><span class="checkmark">&#10003;</span> Clean bill of health on the quick check</div><div class="f-detail">HTTPS works, the certificate is current, and the page starts loading fast.</div></div>';
+  } else {
+    for(const f of fs.sort((a,b)=>a.severity-b.severity)){
+      const L=f.label;
+      h+='<div class="finding sev'+f.severity+'"><span class="f-tag">'+SEVNAME[f.severity]+' — '+L[0]+'</span>'
+        +'<div class="f-title">'+L[1]+'</div>'
+        +(f.detail?'<div class="f-detail mono">detail: <code>'+esc(f.detail)+'</code></div>':'')
+        +'</div>';
+    }
+  }
+  h+='<div class="finding sev3"><span class="f-tag">Note</span><div class="f-detail">This was the quick browser-based pass. The full checkup (exposed config files, contact-link testing, security-header audit) runs from our scanner. Write <a href="mailto:hello@patchhound.dev?subject=Deep+checkup+-+'+encodeURIComponent(host)+'">hello@patchhound.dev</a> with your domain and you will have it the same day.</div></div>';
+  if(fs.some(f=>f.severity===1)){
+    h+='<div class="cta-fix">Want these fixed instead of just reported? Patchhound ships most fixes same-day for a flat &euro;250. Reply with your domain and we take it from here.</div>';
+  }else{
+    h+='<div class="cta-fix">Solid so far. If you ever want a deeper audit (auth flows, injection surfaces, dependency CVEs), that’s our day job: <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>.</div>';
+  }
+  h+='</div>';
+  results.innerHTML=h;results.style.display='block';
+  results.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+async function liteScan(host){
+  const F=[];
+  // 1. HTTPS reachability + response time
+  say('checking https://'+host+' …');
+  const https=await probe('https://'+host+'/favicon.ico',12000);
+  if(!https.ok){
+    say('secure version did not answer, trying plain http …');
+    const http=await probe('http://'+host+'/favicon.ico',8000);
+    if(!http.ok){F.push({severity:1,label:LABELS['site-down'],detail:''});}
+    else{F.push({severity:1,label:LABELS['https-broken'],detail:''});}
+    renderLite({host,findings:F});return;
+  }
+  say('https answers in '+https.ms+' ms');
+  if(https.ms>3000)F.push({severity:3,label:['Slow first load','The server took over 3 seconds ('+https.ms+' ms from here) to answer a simple request. Visitors on mobile connections feel this every visit.'],detail:https.ms+' ms'});
+  // 2. Certificate days-left via Mozilla TLS Observatory (free public API)
+  say('reading TLS certificate …');
+  try{
+    const t=await fetch('https://tls-observatory.services.mozilla.com/api/v1/scan?host='+encodeURIComponent(host),{signal:AbortSignal.timeout(15000)}).then(r=>r.json());
+    const iso=t.scan&&t.scan.certificates&&t.scan.certificates[0]&&t.scan.certificates[0].validity&&t.scan.certificates[0].validity.end;
+    if(iso){
+      const days=Math.floor((new Date(iso)-Date.now())/86400000);
+      say('certificate valid '+days+' more days');
+      if(days<=0)F.push({severity:1,label:LABELS['ssl-expired'],detail:''});
+      else if(days<14)F.push({severity:2,label:LABELS['ssl-expires-soon'],detail:''});
+    }else{say('certificate service busy, skipping that check','warn');}
+  }catch(e){say('certificate service busy, skipping that check','warn');}
+  await new Promise(s=>setTimeout(s,400));
+  renderLite({host,findings:F});
+}
 
 go.addEventListener('click',async()=>{
   msg.className='msg';msg.textContent='';
   const consent=$('consent').checked;
   if(!consent){msg.classList.add('err');msg.textContent='Please tick the ownership confirmation first.';return;}
   const url=urlIn.value.trim();
-  if(!url){msg.classList.add('err');msg.textContent='Enter a domain first, e.g. yourshop.com';return;}
+  const host=normalize(url);
+  if(!host){msg.classList.add('err');msg.textContent='Enter a domain first, e.g. yourshop.com';return;}
   go.disabled=true;go.textContent='Checking…';
   results.style.display='none';results.innerHTML='';
   log.style.display='block';logBody.innerHTML='';
-  say('starting checkup of '+url.replace(/^https?:\/\//,''));
-  try{
-    const res=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url,consent})});
-    const data=await res.json();
-    if(!res.ok){say(data.error||'Something went wrong.','crit');done();return;}
-    await pollScan(data.scan_id);
-  }catch(e){say('Network error — is the service up?','crit');done();}
+  say('starting checkup of '+host);
+  if(API_BASE){
+    try{
+      const res=await fetch(API_BASE+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:host,consent})});
+      const data=await res.json();
+      if(!res.ok){say(data.error||'Something went wrong.','crit');done();return;}
+      await pollScan(API_BASE,data.scan_id);
+      return;
+    }catch(e){say('Scan service unreachable, falling back to the quick check.','warn');}
+  }
+  try{await liteScan(host);}catch(e){say('Network error during the quick check.','crit');}
+  done();
 });
 
 function done(){go.disabled=false;go.textContent='Run checkup';}
 
-async function pollScan(id){
+async function pollScan(base,id){
   const t0=Date.now();
   const stages=[[300,'resolving host…'],[900,'checking https and http reachability'],[1800,'reading TLS certificate'],[2800,'fetching homepage, checking viewport + security headers'],[4200,'testing contact / booking links'],[6500,'probing /.env and /.git exposure (contents never stored)'],[9000,'compiling verdict']];
   let si=0;
   while(Date.now()-t0<60000){
     if(si<stages.length&&Date.now()-t0>stages[si][0]){say(stages[si][1]);si++;}
-    const r=await fetch('/api/scan/'+id).then(r=>r.json()).catch(()=>null);
+    const r=await fetch(base+'/api/scan/'+id).then(r=>r.json()).catch(()=>null);
     if(!r){await new Promise(s=>setTimeout(s,1000));continue;}
     if(r.status==='error'){say(r.message,'crit');done();return;}
     if(r.status==='done'){render(r.result);done();return;}

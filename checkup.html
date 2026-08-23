@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free Site Checkup — Patchhound</title>
+<meta name="description" content="Run a free, instant technical checkup on your website. SSL, uptime, exposed files, broken contact links. No signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f5f0;
+  --card:#fffdf9;
+  --ink:#1a2332;
+  --dim:#6b7280;
+  --line:#ddd8cc;
+  --red:#c0392b;
+  --amber:#b7791f;
+  --green:#2f855a;
+  --navy:#22364f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{max-width:720px;margin:auto;padding:0 20px}
+
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px 0;border-bottom:2px solid var(--ink);
+}
+.logo{font-family:'Fraunces',serif;font-weight:650;font-size:1.25rem;color:var(--ink);text-decoration:none}
+.logo span{color:var(--red)}
+header nav{font-size:.85rem}
+header nav a{color:var(--dim);text-decoration:none;margin-left:20px}
+header nav a:hover{color:var(--ink)}
+
+.hero{padding:64px 0 36px;text-align:center}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--red);margin-bottom:14px;
+}
+h1{
+  font-family:'Fraunces',serif;font-weight:650;
+  font-size:clamp(1.9rem,5vw,2.8rem);
+  line-height:1.15;letter-spacing:-.01em;
+}
+.sub{color:var(--dim);max-width:520px;margin:16px auto 0;font-size:1.02rem}
+
+/* ---- the form ---- */
+.scanbox{
+  background:var(--card);border:2px solid var(--ink);
+  box-shadow:6px 6px 0 rgba(26,35,50,.12);
+  padding:28px;margin:40px auto 0;max-width:640px;text-align:left;
+}
+.field label{display:block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);margin-bottom:8px}
+.urlrow{display:flex;gap:10px;flex-wrap:wrap}
+.urlrow input{
+  flex:1;min-width:220px;font-family:'IBM Plex Mono',monospace;font-size:1rem;
+  padding:13px 14px;border:1.5px solid var(--line);background:#fff;color:var(--ink);
+}
+.urlrow input:focus{outline:none;border-color:var(--navy)}
+button.go{
+  background:var(--navy);color:#fdfcf9;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:.95rem;
+  padding:13px 26px;transition:transform .06s ease;
+}
+button.go:hover{transform:translate(-1px,-1px)}
+button.go:active{transform:translate(0,0)}
+button.go[disabled]{opacity:.55;cursor:wait;transform:none}
+.consent{display:flex;gap:9px;align-items:flex-start;margin-top:16px;font-size:.8rem;color:var(--dim)}
+.consent input{margin-top:4px;accent-color:var(--red)}
+.msg{margin-top:14px;font-size:.88rem;display:none;padding:10px 14px;border-left:3px solid}
+.msg.err{display:block;color:var(--red);border-color:var(--red);background:#faeceb}
+.msg.info{display:block;color:var(--green);border-color:var(--green);background:#edf5ef}
+
+/* ---- live log (signature element) ---- */
+#log{
+  display:none;margin-top:24px;background:#20293a;color:#cfd8e6;
+  font-family:'IBM Plex Mono',monospace;font-size:.82rem;line-height:1.75;
+  padding:18px 20px;min-height:120px;
+}
+#log .t{color:#5d6c85}
+#log .ok{color:#68d391}
+#log .warn{color:#ecc94b}
+#log .crit{color:#fc8181}
+#log .cursor{display:inline-block;width:8px;height:14px;background:#cfd8e6;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ---- results ---- */
+#results{display:none;margin-top:32px}
+.verdict{
+  border:2px solid var(--ink);background:var(--card);
+  padding:26px 28px;box-shadow:6px 6px 0 rgba(26,35,50,.12);
+}
+.verdict-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:6px}
+.verdict h2{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:650}
+.score{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1.05rem}
+.score.bad{color:var(--red)} .score.mid{color:var(--amber)} .score.good{color:var(--green)}
+.finding{padding:14px 0;border-bottom:1px dashed var(--line)}
+.finding:last-of-type{border-bottom:none}
+.f-tag{font-family:'IBM Plex Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.sev1 .f-tag{color:var(--red)} .sev2 .f-tag{color:var(--amber)} .sev3 .f-tag{color:var(--dim)}
+.f-title{font-weight:600;margin:2px 0}
+.f-detail{font-size:.85rem;color:var(--dim)}
+.f-detail code{font-family:'IBM Plex Mono',monospace;font-size:.8rem;background:#efece4;padding:1px 5px}
+.cta-fix{
+  margin-top:18px;background:#efece4;padding:16px 18px;font-size:.92rem;
+}
+.cta-fix a{color:var(--navy);font-weight:600}
+.checkmark{color:var(--green)}
+
+.how{padding:56px 0 30px}
+.how h2,.faq h2{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:650;margin-bottom:22px}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.how-card{background:var(--card);border:1.5px solid var(--line);padding:18px}
+.how-card b{display:block;font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.how-card p{font-size:.88rem;color:var(--dim)}
+
+.faq{padding:30px 0 70px}
+details{border-top:1px solid var(--line);padding:14px 2px}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:600;font-size:.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:'IBM Plex Mono',monospace;color:var(--red);font-size:1.1rem}
+details[open] summary::after{content:"–"}
+details p{font-size:.88rem;color:var(--dim);margin-top:8px}
+
+footer{border-top:2px solid var(--ink);padding:26px 0 40px;font-size:.82rem;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+footer a{color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #log .cursor{animation:none}
+}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <a class="logo" href="/">patch<span>hound</span></a>
+  <nav><a href="#how">How it works</a><a href="/#faq">FAQ</a></nav>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">Free · No signup · ~20 seconds</p>
+  <h1>Find out what's wrong with your website before your visitors do.</h1>
+  <p class="sub">One polite, read-only checkup: certificate, uptime, mobile rendering, broken contact links, publicly exposed files.</p>
+</section>
+
+<div class="scanbox">
+  <div class="field">
+    <label for="url">Your website</label>
+    <div class="urlrow">
+      <input id="url" type="text" inputmode="url" placeholder="yourshop.com" autocomplete="off">
+      <button class="go" id="go">Run checkup</button>
+    </div>
+  </div>
+  <label class="consent">
+    <input type="checkbox" id="consent">
+    <span>I own or represent this website and I'm asking for this check on it.</span>
+  </label>
+  <div class="msg" id="msg"></div>
+
+  <div id="log" aria-live="polite"><span id="logbody"></span><span class="cursor"></span></div>
+
+  <div id="results" aria-live="polite"></div>
+</div>
+
+<section class="how" id="how">
+  <h2>What we check, and why</h2>
+  <div class="how-grid">
+    <div class="how-card"><b>Certificate</b><p>An expired or broken certificate shows every visitor a full-page browser warning.</p></div>
+    <div class="how-card"><b>Uptime &amp; errors</b><p>A site that answers with server errors is quietly turning customers away.</p></div>
+    <div class="how-card"><b>Mobile</b><p>Most visitors arrive on a phone. Without a viewport tag, your site renders zoomed out.</p></div>
+    <div class="how-card"><b>Contact links</b><p>We click your contact and booking links. A dead one means customers can't reach you at all.</p></div>
+    <div class="how-card"><b>Exposed files</b><p>Leftover config or source-control files can hand strangers your credentials. We look, we never store contents.</p></div>
+    <div class="how-card"><b>Security headers</b><p>Two standard headers that cost nothing to add and block whole classes of attacks.</p></div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <h2>Fair questions</h2>
+  <details><summary>Is this safe to run against my site?</summary>
+  <p>The checkup sends at most about six ordinary page requests, the same as someone clicking around your homepage. No login attempts, no fuzzing, nothing written. It's a read-only visit by a very polite robot.</p></details>
+  <details><summary>Do you store my results?</summary>
+  <p>No. The report exists in your browser and in memory on our server just long enough to serve it to you, then it's gone. Nothing is shared with anyone.</p></details>
+  <details><summary>You found problems. Now what?</summary>
+  <p>Every finding links to what it means. If you want them fixed rather than explained, Patchhound ships most fixes same-day for a flat fee. Reply to any email from us, or write hello@patchhound.dev.</p></details>
+  <details><summary>Why do you need the ownership checkbox?</summary>
+  <p>So the tool can't be used to probe sites you don't represent. We also rate-limit scans per visitor.</p></details>
+</section>
+
+<footer>
+  <div>Patchhound — evidence-based security studio.<br>We hunt. We patch. You sleep.</div>
+  <div><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a></div>
+</footer>
+
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const go=$('go'),urlIn=$('url'),msg=$('msg'),log=$('log'),logBody=$('logbody'),results=$('results');
+
+function say(t,c){const d=document.createElement('div');d.innerHTML='<span class="t">['+new Date().toLocaleTimeString()+']</span> '+(c?'<span class="'+c+'">'+t+'</span>':t);logBody.parentNode.insertBefore(d,logBody);}
+
+go.addEventListener('click',async()=>{
+  msg.className='msg';msg.textContent='';
+  const consent=$('consent').checked;
+  if(!consent){msg.classList.add('err');msg.textContent='Please tick the ownership confirmation first.';return;}
+  const url=urlIn.value.trim();
+  if(!url){msg.classList.add('err');msg.textContent='Enter a domain first, e.g. yourshop.com';return;}
+  go.disabled=true;go.textContent='Checking…';
+  results.style.display='none';results.innerHTML='';
+  log.style.display='block';logBody.innerHTML='';
+  say('starting checkup of '+url.replace(/^https?:\/\//,''));
+  try{
+    const res=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url,consent})});
+    const data=await res.json();
+    if(!res.ok){say(data.error||'Something went wrong.','crit');done();return;}
+    await pollScan(data.scan_id);
+  }catch(e){say('Network error — is the service up?','crit');done();}
+});
+
+function done(){go.disabled=false;go.textContent='Run checkup';}
+
+async function pollScan(id){
+  const t0=Date.now();
+  const stages=[[300,'resolving host…'],[900,'checking https and http reachability'],[1800,'reading TLS certificate'],[2800,'fetching homepage, checking viewport + security headers'],[4200,'testing contact / booking links'],[6500,'probing /.env and /.git exposure (contents never stored)'],[9000,'compiling verdict']];
+  let si=0;
+  while(Date.now()-t0<60000){
+    if(si<stages.length&&Date.now()-t0>stages[si][0]){say(stages[si][1]);si++;}
+    const r=await fetch('/api/scan/'+id).then(r=>r.json()).catch(()=>null);
+    if(!r){await new Promise(s=>setTimeout(s,1000));continue;}
+    if(r.status==='error'){say(r.message,'crit');done();return;}
+    if(r.status==='done'){render(r.result);done();return;}
+    await new Promise(s=>setTimeout(s,800));
+  }
+  say('Timed out. The site may be very slow.','warn');done();
+}
+
+const LABELS={
+ 'site-down':['Site unreachable','Neither the secure nor plain version answered. Visitors see an error page.'],
+ 'https-broken':['HTTPS fails','The secure version of the site errors out. Browsers show warnings or block the connection.'],
+ 'server-error':['Server errors','The homepage returns a 5xx error instead of the page.'],
+ 'ssl-expired':['Certificate expired','The TLS certificate has expired. Every visitor gets a full-page browser warning.'],
+ 'ssl-expires-soon':['Certificate expiring soon','The TLS certificate expires within two weeks.'],
+ 'ssl-unreadable':['Certificate unreadable','We could not verify the certificate.'],
+ 'no-viewport':['Not mobile-friendly','No viewport meta tag: on phones the site renders zoomed out and hard to use.'],
+ 'broken-contact':['Contact link dead','A contact or booking link returns an error, so customers cannot reach you.'],
+ 'env-exposed':['Credentials exposed','A configuration file containing credential-style keys is publicly downloadable.'],
+ 'git-exposed':['Source control exposed','The internal .git folder is publicly downloadable; source code can be reconstructed from it.'],
+ 'headers-missing':['Security headers missing','Strict-Transport-Security and/or X-Content-Type-Options are not set. Free to fix, blocks common attacks.'],
+ 'broken-link':['Broken inbound link','A page linked from elsewhere on the site returns an error.'],
+ 'check-limited':['Limited check','Bot protection answered our reader, so deeper checks were skipped. Not necessarily a problem.']
+};
+const SEVNAME={1:'Critical',2:'Fix soon',3:'Good practice'};
+
+function render(r){
+  const fs=r.findings.filter(f=>f.id!=='check-limited');
+  const crit=fs.filter(f=>f.severity===1).length,mid=fs.filter(f=>f.severity===2).length;
+  let score,cls;
+  if(crit){score=crit+' critical issue'+(crit>1?'s':'')+' found';cls='bad';}
+  else if(mid){score='No critical issues, '+mid+' to improve';cls='mid';}
+  else{score='All checks passed';cls='good';}
+
+  let h='<div class="verdict"><div class="verdict-head"><h2>Checkup report — '+r.host+'</h2><span class="score '+cls+' mono">'+score+'</span></div>';
+  if(!fs.length){
+    h+='<div class="finding"><span class="f-tag sev-good" style="color:var(--green)">Pass</span><div class="f-title"><span class="checkmark">&#10003;</span> Clean bill of health</div><div class="f-detail">Every automated check passed. That is genuinely rarer than you would think.</div></div>';
+  } else {
+    for(const f of fs.sort((a,b)=>a.severity-b.severity)){
+      const L=LABELS[f.id]||[f.id,f.detail];
+      h+='<div class="finding sev'+f.severity+'"><span class="f-tag">'+SEVNAME[f.severity]+' — '+L[0]+'</span>'
+        +'<div class="f-title">'+L[1]+'</div>'
+        +(f.detail&&!L[1].includes(f.detail)?'<div class="f-detail mono">detail: <code>'+esc(f.detail)+'</code></div>':'')
+        +'</div>';
+    }
+  }
+  const limited=r.findings.find(f=>f.id==='check-limited');
+  if(limited)h+='<div class="finding sev3"><span class="f-tag">Note</span><div class="f-detail">'+LABELS['check-limited'][1]+' ('+esc(limited.detail)+')</div></div>';
+  if(fs.some(f=>f.severity===1)){
+    h+='<div class="cta-fix">Want these fixed instead of just reported? Patchhound ships most fixes same-day for a flat &euro;250. Write <a href="mailto:hello@patchhound.dev?subject=Checkup fix — '+r.host+'">hello@patchhound.dev</a> with this page open and mention your domain.</div>';
+  }else{
+    h+='<div class="cta-fix">Solid site. If you ever want a deeper audit (auth flows, injection surfaces, dependency CVEs), that\'s our day job: <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>.</div>';
+  }
+  h+='</div>';
+  say('verdict ready.','ok');
+  results.innerHTML=h;results.style.display='block';
+  results.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+</script>
+</body>
+</html>

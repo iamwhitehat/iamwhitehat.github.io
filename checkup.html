@@ -274,18 +274,16 @@ async function liteScan(host){
   }
   say('https answers in '+https.ms+' ms');
   if(https.ms>3000)F.push({severity:3,label:['Slow first load','The server took over 3 seconds ('+https.ms+' ms from here) to answer a simple request. Visitors on mobile connections feel this every visit.'],detail:https.ms+' ms'});
-  // 2. Certificate days-left via Mozilla TLS Observatory (free public API)
-  say('reading TLS certificate …');
+  // 2. Security configuration grade via MDN HTTP Observatory (free public API)
+  say('running Mozilla security assessment …');
   try{
-    const t=await fetch('https://tls-observatory.services.mozilla.com/api/v1/scan?host='+encodeURIComponent(host),{signal:AbortSignal.timeout(15000)}).then(r=>r.json());
-    const iso=t.scan&&t.scan.certificates&&t.scan.certificates[0]&&t.scan.certificates[0].validity&&t.scan.certificates[0].validity.end;
-    if(iso){
-      const days=Math.floor((new Date(iso)-Date.now())/86400000);
-      say('certificate valid '+days+' more days');
-      if(days<=0)F.push({severity:1,label:LABELS['ssl-expired'],detail:''});
-      else if(days<14)F.push({severity:2,label:LABELS['ssl-expires-soon'],detail:''});
-    }else{say('certificate service busy, skipping that check','warn');}
-  }catch(e){say('certificate service busy, skipping that check','warn');}
+    const t=await fetch('https://observatory-api.mdn.mozilla.net/api/v2/scan?host='+encodeURIComponent(host),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}',signal:AbortSignal.timeout(25000)}).then(r=>r.json());
+    if(t&&typeof t.score==='number'){
+      say('Mozilla grade: '+t.grade+' ('+t.score+'/100)');
+      if(t.score<50)F.push({severity:2,label:['Weak security configuration','Mozilla\u2019s independent assessment scored this site '+t.score+'/100 (grade '+t.grade+'). Usually missing security headers and cookie flags; all free to fix.'],detail:'grade '+t.grade+', score '+t.score+'/100'});
+      else if(t.score<80)F.push({severity:3,label:['Security configuration could be stronger','Mozilla\u2019s assessment scored this site '+t.score+'/100 (grade '+t.grade+'). Some hardening is missing, nothing urgent.'],detail:'grade '+t.grade+', score '+t.score+'/100'});
+    }
+  }catch(e){say('assessment service busy, skipping that check','warn');}
   await new Promise(s=>setTimeout(s,400));
   renderLite({host,findings:F});
 }

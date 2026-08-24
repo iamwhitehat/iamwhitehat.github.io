@@ -6,18 +6,20 @@
 <title>Patchhound: security fixes with published proof</title>
 <meta name="description" content="A security studio that finds real vulnerabilities, fixes them, and publishes the evidence. Weekly hunt log. Flat-fee tune-ups for web-facing businesses.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 <link rel="alternate" type="application/rss+xml" title="Patchhound hunt log" href="/feed.xml">
 </head>
 <body>
 
 <header class="site"><div class="wrap">
-  <a class="logo" href="/">Patchhound</a>
+  <a class="brand" href="/">
+    <span class="brandmark">P</span>
+    <span class="brandname">Patchhound<span class="brandtag">We hunt · we patch · you sleep</span></span>
+  </a>
   <nav class="main">
     <a href="/" class="here">Hunt log</a>
     <a href="/services.html">Services</a>
-    <a href="/checkup.html">Free checkup</a>
     <a href="/about.html">Method</a>
     <a href="mailto:hello@patchhound.dev">Contact</a>
   </nav>
@@ -26,24 +28,49 @@
 <div class="wrap">
 
 <section class="hero">
-  <span class="stamp">CASE FILES OPEN</span>
-  <h1>We find the hole, patch it, and publish the diff.</h1>
-  <p class="lede">Patchhound is a one-hound security studio. Every fix we ship goes through a five-level verification gate and gets written up in the hunt log below: bug, diff, test numbers, mistakes included. Businesses hire us for the same treatment at a flat fee.</p>
-  <p><a class="btn solid" href="/services.html">Get a €490 tune-up</a>&nbsp;&nbsp;<a class="btn quiet" href="#log">Read the hunt log</a></p>
+  <div class="hero-copy">
+    <div class="eyebrow">Case files open</div>
+    <h1>We find the hole, patch it, and publish <em>the diff.</em></h1>
+    <p class="lede">Patchhound is a one-hound security studio. Every fix passes a five-level verification gate before it ships. Businesses hire us for the same treatment at a flat fee: <strong>€490, findings reproduced, patches proven on your live server.</strong></p>
+    <p><a class="btn solid" href="/services.html">Get the €490 tune-up</a>&nbsp;&nbsp;<a class="btn quiet" href="#log">Read the hunt log</a></p>
+  </div>
+
+  <figure class="exhibit-file" aria-label="An actual diff from our first case file">
+    <div class="exhibit-head"><span>EXHIBIT A · CASE FILE No.001</span><span class="stamp animate">PATCHED</span></div>
+    <div class="exhibit-body"><span class="cm">// apps/api/src/routes/proposalRoutes.js</span><br>
+      <span class="del">- proposalRoutes.post("/", postProposal);</span><br>
+      <span class="add">+ proposalRoutes.post("/", authMiddleware, postProposal);</span><br>
+      <span class="cm">// unauthenticated POST closed. 401 without token,</span><br>
+      <span class="cm">// 201 with one. tests: 1/3 → 3/3.</span></div>
+    <figcaption style="padding:10px 18px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#8B8574;border-top:1.5px dashed #D8D2C2;background:#F3EFE5">
+      Live pull request: <a style="color:#B4362A;text-decoration:none" href="https://github.com/SecureBananaLabs/bug-bounty/pull/12001">bug-bounty#12001 ↗</a>
+    </figcaption>
+  </figure>
+  <p class="exhibit-note" style="grid-column:2">↑ every claim on this site looks like this: a command you could have run yourself.</p>
 </section>
+
+<div class="ledger" role="list" aria-label="Track record in numbers">
+  <div class="wrap">
+    <div class="ledger-item" role="listitem"><div class="ledger-num">5<span>-level</span></div><div class="ledger-label">verification gate, no exceptions</div></div>
+    <div class="ledger-item" role="listitem"><div class="ledger-num">100%</div><div class="ledger-label">findings reproduced before fixed</div></div>
+    <div class="ledger-item" role="listitem"><div class="ledger-num">72h</div><div class="ledger-label">tune-up turnaround, flat €490</div></div>
+    <div class="ledger-item" role="listitem"><div class="ledger-num">0<span> secrets</span></div><div class="ledger-label">client work stays confidential by default</div></div>
+  </div>
+</div>
 
 <div class="secline"><span class="tab">Hunt log</span></div>
 <section class="block" id="log">
 
-
   <a class="case" href="/blog/002-idempotency-gaps.html">
-    <div class="row"><span class="no">FILE No.002</span><span class="stamp green">PATCHED</span></div>
+    <span class="stamp green">PATCHED</span>
+    <div class="row"><span class="no">FILE No.002</span></div>
     <h3>The bounty was already claimed. We found two bugs anyway.</h3>
     <p class="sum">An idempotency race with a merged fix still had two real gaps: a lost-race error surfacing as a raw 500, and responses outliving their claims. Reading acceptance criteria against shipped code pays.</p>
     <div class="meta">race conditions · payment integrity · postgres · Aug 2026</div>
   </a>
   <a class="case" href="/blog/001-bounty-farm.html">
-    <div class="row"><span class="no">FILE No.001</span><span class="stamp green">PATCHED</span></div>
+    <span class="stamp green">PATCHED</span>
+    <div class="row"><span class="no">FILE No.001</span></div>
     <h3>We found a repo farming AI agents with prompt injections</h3>
     <p class="sum">A "$780 bounty program" with no way to get paid and README instructions written at AI agents. How we spotted it in thirty seconds, plus the one-line fix for the real bug inside.</p>
     <div class="meta">auth bypass · bounty programs · prompt injection · Aug 2026</div>
@@ -65,12 +92,51 @@
     RSS: <a href="/feed.xml">/feed.xml</a> · GitHub: <a href="https://github.com/iamwhitehat">iamwhitehat</a></p>
 </section>
 
+<section class="contact-band">
+  <div>
+    <h2>Your site gets the same treatment.</h2>
+    <p>Same gate, same evidence standard, applied to your endpoints within 72 hours of your first email.</p>
+  </div>
+  <a class="btn solid" href="/services.html">Start at services</a>
+</section>
+
 </div>
 
 <footer class="site"><div class="wrap">
-  <span><strong>Patchhound.</strong> We hunt, we patch, you sleep.</span>
-  <span><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a></span>
+  <div class="cols">
+    <div>
+      <div class="fbrand">Patchhound.</div>
+      <div class="ftag">We hunt · we patch · you sleep</div>
+    </div>
+    <div class="fcol">
+      <strong>Site</strong>
+      <a href="/">Hunt log</a>
+      <a href="/blog/">All case files</a>
+      <a href="/services.html">Services</a>
+      <a href="/about.html">Method</a>
+    </div>
+    <div class="fcol">
+      <strong>Evidence</strong>
+      <a href="https://github.com/iamwhitehat">GitHub</a>
+      <a href="/feed.xml">RSS</a>
+      <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/12001">Case file PR</a>
+    </div>
+    <div class="fcol">
+      <strong>Contact</strong>
+      <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>
+    </div>
+  </div>
+  <div class="legal"><span>Patchhound — evidence-based security studio</span><span>© 2026 · NL</span></div>
 </div></footer>
+
+<script>
+/* stamp lands after paint, like it was just inked */
+window.addEventListener('load',function(){
+  document.querySelectorAll('.stamp.animate').forEach(function(s,i){
+    s.style.animationDelay=(0.25+i*0.15)+'s';
+  });
+});
+</script>
 
 </body>
 </html>

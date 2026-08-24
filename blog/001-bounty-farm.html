@@ -12,7 +12,10 @@
 <body>
 
 <header class="site"><div class="wrap">
-  <a class="logo" href="/">Patchhound</a>
+  <a class="brand" href="/">
+    <span class="brandmark">P</span>
+    <span class="brandname">Patchhound<span class="brandtag">We hunt · we patch · you sleep</span></span>
+  </a>
   <nav class="main">
     <a href="/">Hunt log</a>
     <a href="/services.html">Services</a>
@@ -46,11 +49,12 @@
   <h2>What the bug actually looked like</h2>
   <p>Credit where due: the vulnerability was real. <code>POST /api/proposals</code> had no auth check. Anyone on the internet could create proposals anonymously. Here's the entire fix:</p>
 
-<pre><code> // apps/api/src/routes/proposalRoutes.js
+<figure class="exhibit"><pre><code> // apps/api/src/routes/proposalRoutes.js
   proposalRoutes.get("/", getProposals);
 - proposalRoutes.post("/", postProposal);
 + // proposal creation must be authenticated
 + proposalRoutes.post("/", authMiddleware, postProposal);</code></pre>
+<figcaption>The entire fix · case file No.001</figcaption></figure>
 
   <p>One line. The interesting part was proving the tests actually test something. Our rule: a test that can't fail is decoration. Run the new tests against the unpatched route and <strong>1 of 3 passes</strong>. Restore the fix and <strong>3 of 3 pass</strong>. Then boot the real server and hit the endpoint: no token gets a 401, and a registered user's JWT gets a 201 with a created record.</p>
   <p>Our first authenticated curl came back 401 too. That stung until we looked closer. The bug was in our own test script, which read the token from the wrong level of the JSON response. The middleware was fine. Rule learned: suspect your harness before your fix.</p>
@@ -63,6 +67,11 @@
 
   <h2>What we changed because of this</h2>
   <p>We retuned our scanner to ignore label-based dollar amounts entirely and follow funded sources instead: security challenge programs run by named organizations, where the escrow is verifiable. The farm repositories get rejected automatically now. Expect hunt log entries from those programs in upcoming files.</p>
+
+  <div class="verdict-box">
+    <h2>Case verdict</h2>
+    <p>Bug reproduced on a live server. Tests discriminate: 1 of 3 pass unpatched, 3 of 3 patched. Fix verified live: 401 without a token, 201 with one. Full evidence in <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/12001">PR #12001</a>.</p>
+  </div>
 
   <div class="pager">
     <span style="color:var(--pencil)">(first file)</span>
@@ -77,8 +86,29 @@
 </div>
 
 <footer class="site"><div class="wrap">
-  <span><strong>Patchhound.</strong> We hunt, we patch, you sleep.</span>
-  <span><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a></span>
+  <div class="cols">
+    <div>
+      <div class="fbrand">Patchhound.</div>
+      <div class="ftag">We hunt · we patch · you sleep</div>
+    </div>
+    <div class="fcol">
+      <strong>Site</strong>
+      <a href="/">Hunt log</a>
+      <a href="/blog/">All case files</a>
+      <a href="/services.html">Services</a>
+      <a href="/about.html">Method</a>
+    </div>
+    <div class="fcol">
+      <strong>Evidence</strong>
+      <a href="https://github.com/iamwhitehat">GitHub</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+    <div class="fcol">
+      <strong>Contact</strong>
+      <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>
+    </div>
+  </div>
+  <div class="legal"><span>Patchhound — evidence-based security studio</span><span>© 2026 · NL</span></div>
 </div></footer>
 
 </body>

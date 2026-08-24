@@ -6,17 +6,19 @@
 <title>Services · Patchhound</title>
 <meta name="description" content="Flat-fee security work with published evidence: a €490 tune-up, a monthly watch, and secure builds. Fixed scope, no hourly billing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
 <header class="site"><div class="wrap">
-  <a class="logo" href="/">Patchhound</a>
+  <a class="brand" href="/">
+    <span class="brandmark">P</span>
+    <span class="brandname">Patchhound<span class="brandtag">We hunt · we patch · you sleep</span></span>
+  </a>
   <nav class="main">
     <a href="/">Hunt log</a>
     <a href="/services.html" class="here">Services</a>
-    <a href="/checkup.html">Free checkup</a>
     <a href="/about.html">Method</a>
     <a href="mailto:hello@patchhound.dev">Contact</a>
   </nav>
@@ -25,7 +27,7 @@
 <div class="wrap">
   <div class="crumb"><a href="/">Home</a> / services</div>
 
-<section class="hero" style="padding-top:28px">
+<section class="hero" style="padding-top:28px;display:block">
   <h1>Fixed scope. Fixed price. Fixed site.</h1>
   <p class="lede">No discovery call to learn the price, no hourly meter. You see the price, the deliverable, and the evidence standard before we start. Every engagement ends with a report you can hand to your developer. Or use it to fire us, if we missed something.</p>
 </section>
@@ -34,7 +36,7 @@
 <section class="block">
 
   <div class="offer hot">
-    <span class="stamp">MOST REQUESTED</span>
+    <span class="stamp">Most requested</span>
     <h3 style="margin-top:12px">Security tune-up</h3>
     <div class="price">€490 flat · delivered within 72 hours of start</div>
     <ul>
@@ -44,7 +46,7 @@
       <li>Written report: the bug, the diff, before/after test results</li>
       <li>30-minute walkthrough call if you want one</li>
     </ul>
-    <p style="margin-top:16px"><a class="btn solid" href="mailto:hello@patchhound.dev?subject=Tune-up%20request">Start a tune-up</a></p>
+    <p><a class="btn solid" href="mailto:hello@patchhound.dev?subject=Tune-up%20request">Start a tune-up</a></p>
   </div>
 
   <div class="offer">
@@ -55,7 +57,7 @@
       <li>Findings patched same-week with the same evidence standard</li>
       <li>Monthly one-page report: what we checked, what we caught</li>
     </ul>
-    <p style="margin-top:16px"><a class="btn quiet" href="mailto:hello@patchhound.dev?subject=Monthly%20watch">Ask about the watch</a></p>
+    <p><a class="btn quiet" href="mailto:hello@patchhound.dev?subject=Monthly%20watch">Ask about the watch</a></p>
   </div>
 
   <div class="offer">
@@ -66,24 +68,59 @@
       <li>Built secure from the first line, not patched after</li>
       <li>Deployed to your domain; you own every file</li>
     </ul>
-    <p style="margin-top:16px"><a class="btn quiet" href="mailto:hello@patchhound.dev?subject=Build">Scope a build</a></p>
+    <p><a class="btn quiet" href="mailto:hello@patchhound.dev?subject=Build">Scope a build</a></p>
   </div>
 
 </section>
 
 <div class="secline"><span class="tab">Straight answers</span></div>
-<section class="block">
-  <p><strong>Why €490 when Fiverr offers €50 audits?</strong> A €50 audit is a scanned checklist. Ours ends with reproduced findings, applied patches, and test evidence from your live server. If that difference doesn't matter to you, the cheap one is the right call and we'll say so.</p>
-  <p><strong>What if you find nothing?</strong> Then you get a report saying we checked these specific things and found them sound. That's worth knowing, and it's what you're paying for. Not a guaranteed hole.</p>
-  <p><strong>Will you publish our vulnerabilities?</strong> Never without written permission. Open source work gets published (that's the hunt log); client work stays confidential by default.</p>
-  <p><strong>Referrals:</strong> if a tune-up saves your skin, an introduction to one other business owner is the best thanks. We take €50 off for both sides.</p>
+<section class="block faq">
+  <dl>
+    <dt>Why €490 when Fiverr offers €50 audits?</dt>
+    <dd>A €50 audit is a scanned checklist. Ours ends with reproduced findings, applied patches, and test evidence from your live server. If that difference doesn't matter to you, the cheap one is the right call and we'll say so.</dd>
+    <dt>What if you find nothing?</dt>
+    <dd>Then you get a report saying we checked these specific things and found them sound. That's worth knowing, and it's what you're paying for. Not a guaranteed hole.</dd>
+    <dt>Will you publish our vulnerabilities?</dt>
+    <dd>Never without written permission. Open source work gets published (that's the hunt log); client work stays confidential by default.</dd>
+    <dt>Referrals?</dt>
+    <dd>If a tune-up saves your skin, an introduction to one other business owner is the best thanks. We take €50 off for both sides.</dd>
+  </dl>
+</section>
+
+<section class="contact-band">
+  <div>
+    <h2>Still deciding?</h2>
+    <p>Read a case file first. It shows exactly what our evidence standard looks like in practice, before you spend a cent.</p>
+  </div>
+  <a class="btn quiet" href="/blog/001-bounty-farm.html">Read case file No.001</a>
 </section>
 
 </div>
 
 <footer class="site"><div class="wrap">
-  <span><strong>Patchhound.</strong> We hunt, we patch, you sleep.</span>
-  <span><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a></span>
+  <div class="cols">
+    <div>
+      <div class="fbrand">Patchhound.</div>
+      <div class="ftag">We hunt · we patch · you sleep</div>
+    </div>
+    <div class="fcol">
+      <strong>Site</strong>
+      <a href="/">Hunt log</a>
+      <a href="/blog/">All case files</a>
+      <a href="/services.html">Services</a>
+      <a href="/about.html">Method</a>
+    </div>
+    <div class="fcol">
+      <strong>Evidence</strong>
+      <a href="https://github.com/iamwhitehat">GitHub</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+    <div class="fcol">
+      <strong>Contact</strong>
+      <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>
+    </div>
+  </div>
+  <div class="legal"><span>Patchhound — evidence-based security studio</span><span>© 2026 · NL</span></div>
 </div></footer>
 
 </body>

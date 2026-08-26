@@ -3,197 +3,363 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free checkup: paste your repo or URL, get fix prompts | Patchhound</title>
-<meta name="description" content="Built your app with AI (Cursor, Lovable, Claude)? Paste your public GitHub repo or your live site URL and get a security checkup with copy-paste fix prompts. Free.">
+<title>Patchhound — your AI-built app, read like a case file</title>
+<meta name="description" content="Built with Cursor or Lovable? Paste your public repo or live site. Get every security hole as a fix prompt you can paste back into your editor. Free checkup.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-.mode{display:flex;gap:.5rem;margin-bottom:1.5rem}
-.mode button{background:#0d1117;color:#8b949e;border:1px solid #30363d;border-radius:99px;
-padding:.5rem 1.2rem;font-weight:600;cursor:pointer;font-size:.95rem}
-.mode button.on{background:#238636;color:#fff;border-color:#238636}
-#form-repo label small, #form-site label small{color:#8b949e;font-weight:400}
+/* ============ tokens ============ */
+:root{
+  --paper:#0C0E12; --panel:#14171E; --panel2:#181C25;
+  --line:#262B36; --ink:#E8EBF0; --mut:#939CAE;
+  --blood:#FF4D3D; --stamp:#37D67A;
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Public Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans)}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+:focus-visible{outline:2px solid var(--blood);outline-offset:3px;border-radius:4px}
+
+/* ============ nav ============ */
+header{position:sticky;top:0;z-index:50;background:rgba(12,14,18,.88);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;letter-spacing:.02em}
+.brand .mark{width:28px;height:28px;border:1.5px solid var(--blood);border-radius:7px;
+  display:grid;place-items:center;color:var(--blood);font-family:var(--mono);font-size:15px;font-weight:700}
+.brand small{color:var(--mut);font-weight:400;display:block;font-size:11px;margin-top:-2px}
+nav.links{display:flex;gap:26px;align-items:center;font-size:14px}
+nav.links a{text-decoration:none;color:var(--mut);transition:color .15s}
+nav.links a:hover{color:var(--ink)}
+nav.links a.cta{color:var(--blood);border:1px solid rgba(255,77,61,.4);padding:8px 16px;border-radius:8px;font-weight:600}
+nav.links a.cta:hover{background:rgba(255,77,61,.08);border-color:var(--blood)}
+@media(max-width:760px){nav.links a:not(.cta){display:none}}
+
+/* ============ hero ============ */
+.hero{padding:96px 0 56px;position:relative}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--mut);letter-spacing:.14em;
+  text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.kicker::before{content:"";width:22px;height:2px;background:var(--blood)}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,7vw,84px);
+  line-height:1.02;letter-spacing:-.01em;margin:22px 0 0;max-width:900px}
+.hero h1 em{font-style:italic;color:var(--blood)}
+.hero p.sub{max-width:560px;color:var(--mut);margin:26px 0 34px;font-size:17px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:15px;
+  padding:14px 26px;border-radius:10px;transition:transform .15s, box-shadow .15s}
+.btn.primary{background:var(--blood);color:#fff;box-shadow:0 0 0 0 rgba(255,77,61,.35)}
+.btn.primary:hover{transform:translateY(-1px);box-shadow:0 6px 24px -6px rgba(255,77,61,.45)}
+.btn.ghost{border:1px solid var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--mut)}
+.hero .btns{display:flex;gap:14px;flex-wrap:wrap}
+
+/* verdict strip */
+.strip{margin-top:64px;border:1px solid var(--line);border-radius:12px;background:var(--panel);
+  overflow:hidden}
+.strip .bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:12px;color:var(--mut)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dot.r{background:#3d2226}.dot.y{background:#3b3524}.dot.g{background:#22392c}
+.strip .bar span{margin-left:auto}
+.strip .feed{font-family:var(--mono);font-size:13.5px;line-height:2;padding:18px 20px;min-height:132px;white-space:pre-wrap}
+.feed .ln{display:block;opacity:0;transform:translateY(4px);animation:reveal .35s forwards}
+.feed .ln b{color:var(--blood);font-weight:500}
+.feed .ln.ok b{color:var(--stamp)}
+.feed .redact{background:var(--blood);color:var(--blood);border-radius:2px;padding:0 6px}
+@keyframes reveal{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.feed .ln{opacity:1;transform:none}}
+
+/* ============ exhibits ============ */
+section{padding:72px 0}
+.ex-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mut);display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ex-eyebrow::before{content:"";width:4px;height:16px;background:var(--blood);border-radius:1px}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,44px);line-height:1.1;margin-bottom:14px}
+.lede{color:var(--mut);max-width:640px;margin-bottom:40px}
+
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:860px){.duo{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line);transition:background .2s}
+.card:hover::before{background:var(--blood)}
+.card h3{font-family:var(--serif);font-weight:400;font-size:26px;margin-bottom:6px}
+.card p.tag{font-family:var(--mono);font-size:12px;color:var(--mut);margin-bottom:18px}
+.term{background:#090B0F;border:1px solid var(--line);border-radius:8px;padding:16px;
+  font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--mut)}
+.term b{color:var(--ink);font-weight:500}
+.term .bad{color:var(--blood)}
+.term .good{color:var(--stamp)}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:step}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px;counter-increment:step}
+.step::before{content:"0" counter(step);font-family:var(--mono);font-size:13px;color:var(--blood);letter-spacing:.1em}
+.step h3{font-size:17px;margin:12px 0 8px}
+.step p{color:var(--mut);font-size:14.5px}
+
+/* pricing */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+@media(max-width:860px){.tiers{grid-template-columns:1fr}}
+.tier{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px;display:flex;flex-direction:column}
+.tier.hot{border-color:rgba(255,77,61,.55);position:relative}
+.tier.hot::after{content:"MOST PICKED";position:absolute;top:-11px;left:24px;background:var(--blood);color:#fff;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:4px 10px;border-radius:3px}
+.tier .price{font-family:var(--serif);font-size:44px;line-height:1;margin:14px 0 2px}
+.tier .price sup{font-size:16px;color:var(--mut);font-family:var(--mono)}
+.tier .per{font-family:var(--mono);font-size:12px;color:var(--mut)}
+.tier ul{list-style:none;margin:22px 0;display:grid;gap:10px;font-size:14.5px;color:var(--mut)}
+.tier li::before{content:"—";color:var(--blood);margin-right:8px}
+.tier .btn{justify-content:center;margin-top:auto}
+
+/* form */
+#checkup .panel-form{max-width:720px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:34px}
+.tabs{display:flex;gap:8px;margin-bottom:26px}
+.tabs button{flex:1;background:transparent;border:1px solid var(--line);color:var(--mut);
+  padding:11px;border-radius:9px;font:600 14px var(--sans);cursor:pointer;transition:all .15s}
+.tabs button.on{background:var(--panel2);border-color:rgba(255,77,61,.5);color:var(--ink)}
+.f label{display:block;font:600 13.5px var(--sans);margin:0 0 7px}
+.f input[type=text],.f input[type=email],.f input:not([type]){width:100%;padding:13px 15px;font:14px var(--mono);
+  background:#090B0F;color:var(--ink);border:1px solid var(--line);border-radius:9px;margin-bottom:18px}
+.f input:focus{outline:none;border-color:rgba(255,77,61,.6)}
+.f input::placeholder{color:#4c5666}
+.consent{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--mut);margin-bottom:20px}
+.consent input{accent-color:var(--blood);margin-top:3px}
+.submit{width:100%;background:var(--blood);color:#fff;border:none;padding:15px;border-radius:10px;
+  font:700 15px var(--sans);cursor:pointer;transition:filter .15s}
+.submit:hover{filter:brightness(1.1)}
+.submit[disabled]{opacity:.6;cursor:wait}
+.msg{min-height:22px;font-size:13.5px;margin-top:12px;font-family:var(--mono)}
+.msg.ok{color:var(--stamp)}.msg.err{color:var(--blood)}
+.privacy-note{text-align:center;color:var(--mut);font-size:12.5px;margin-top:18px}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:36px 0;color:var(--mut);font-size:13.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--mut)}
 </style>
 </head>
 <body>
 
-<header class="site"><div class="wrap">
+<header><div class="wrap nav">
   <a class="brand" href="/">
-    <span class="brandmark">P</span>
-    <span class="brandname">Patchhound<span class="brandtag">We hunt · we patch · you sleep</span></span>
+    <span class="mark">P</span>
+    <span>Patchhound<small>we hunt · we patch · you sleep</small></span>
   </a>
-  <nav class="main">
+  <nav class="links">
     <a href="/">Hunt log</a>
     <a href="/services.html">Services</a>
     <a href="/about.html">Method</a>
-    <a href="/checkup.html" class="here">Free checkup</a>
+    <a class="cta" href="#checkup">Free checkup</a>
   </nav>
 </div></header>
 
-<div class="wrap">
+<div class="hero wrap">
+  <p class="kicker">Patchhound · evidence-based security</p>
+  <h1>Your app was written fast.<br>We read it like <em>detectives.</em></h1>
+  <p class="sub">Cursor and Lovable build in hours and leak the same way every time:
+  keys where visitors can read them, endpoints anyone can call. Paste your repo or URL.
+  Get every hole as a fix prompt you paste straight back into your editor.</p>
+  <div class="btns">
+    <a class="btn primary" href="#checkup">Run the free checkup</a>
+    <a class="btn ghost" href="#exhibit-a">See what we find</a>
+  </div>
 
-<section class="hero" style="padding-top:3rem">
-  <p class="kicker">Free checkup</p>
-  <h1>Your AI-built app has the same<br>wounds as every AI-built app.<br><em>Find out where yours are.</em></h1>
-  <p class="lede">Cursor, Lovable and Claude build fast, and they leak the same way
-  every time: API keys in client code, endpoints with no auth, SQL built from user input.
-  Paste your public repo or live site below. You get back a plain verdict and one
-  copy-paste <strong>fix prompt per finding</strong>, ready for Cursor or Claude.</p>
-</section>
-
-<div style="max-width:640px;margin:0 auto 2.5rem">
-<div class="mode">
-  <button id="tab-repo" class="on" type="button">Scan my GitHub repo</button>
-  <button id="tab-site" type="button">Scan my live site</button>
+  <div class="strip" aria-hidden="true">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      patchhound · live scan feed<span>demo output, secrets redacted</span></div>
+    <div class="feed" id="feed"></div>
+  </div>
 </div>
 
-<section class="panel">
-<form id="form-repo">
-    <p style="margin:.2rem 0 .9rem">
-      <label for="repo" style="display:block;font-weight:600;margin-bottom:.3rem">GitHub repo (public)</label>
-      <input id="repo" name="repo" placeholder="yourname/your-app" required
-             style="width:100%;padding:.7rem .8rem;font-family:'JetBrains Mono',monospace;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
-    </p>
-    <p style="margin:.2rem 0 .9rem">
-      <label for="email-r" style="display:block;font-weight:600;margin-bottom:.3rem">Email for the report</label>
-      <input id="email-r" type="email" placeholder="you@yourapp.com" required
-             style="width:100%;padding:.7rem .8rem;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
-    </p>
-    <button id="go" type="submit"
-            style="background:#238636;color:#fff;border:none;border-radius:8px;padding:.75rem 1.4rem;font-weight:700;cursor:pointer;font-size:1rem">
-      Run my free checkup
-    </button>
-    <span id="msg" style="margin-left:.8rem"></span>
-</form>
+<section id="exhibit-a"><div class="wrap">
+  <p class="ex-eyebrow">Exhibit A — two ways in</p>
+  <h2>Scan the source, or scan what's live.</h2>
+  <p class="lede">The repo scan reads your code and git history for deeper wounds.
+  The site scan probes what the internet can touch right now. Run both if you can.</p>
+  <div class="duo">
+    <div class="card">
+      <h3>Repo scan</h3>
+      <p class="tag">source + git history · public repos</p>
+      <div class="term">
+        <b>found</b> sk_live_51H8••••••• <span class="bad">in src/Payment.jsx</span><br>
+        &nbsp;&nbsp;→ ships to every visitor's browser<br>
+        <b>found</b> POST /api/orders <span class="bad">no auth check</span><br>
+        <b>found</b> SQL built from req.query <span class="bad">injectable</span><br>
+        <span class="good">fix prompts ready: 3</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Live-site scan</h3>
+      <p class="tag">deployed app · what's exposed now</p>
+      <div class="term">
+        <b>probe</b> /.env <span class="bad">downloadable</span><br>
+        <b>probe</b> /.git/HEAD <span class="bad">readable</span><br>
+        <b>probe</b> /assets/app.js.map <span class="bad">source exposed</span><br>
+        <b>probe</b> TLS cert <span class="good">valid 74 days</span><br>
+        <span class="good">fix prompts ready: 3</span>
+      </div>
+    </div>
+  </div>
+</div></section>
 
-<form id="form-site" hidden>
-    <p style="margin:.2rem 0 .9rem">
-      <label for="site-url" style="display:block;font-weight:600;margin-bottom:.3rem">Your live site URL</label>
-      <input id="site-url" placeholder="https://yourapp.com" required
-             style="width:100%;padding:.7rem .8rem;font-family:'JetBrains Mono',monospace;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
-    </p>
-    <p style="margin:.2rem 0 .9rem">
-      <label for="email-s" style="display:block;font-weight:600;margin-bottom:.3rem">Email for the report</label>
-      <input id="email-s" type="email" placeholder="you@yourapp.com" required
-             style="width:100%;padding:.7rem .8rem;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
-    </p>
-    <p style="margin:.2rem 0 .9rem;font-size:.85rem;color:#c9d1d9">
-      <label><input type="checkbox" id="consent" required> I own or am authorized to scan this site</label>
-    </p>
-    <button id="go-s" type="submit"
-            style="background:#238636;color:#fff;border:none;border-radius:8px;padding:.75rem 1.4rem;font-weight:700;cursor:pointer;font-size:1rem">
-      Check my live site
-    </button>
-    <span id="msg-s" style="margin-left:.8rem"></span>
-</form>
-</section>
+<section><div class="wrap">
+  <p class="ex-eyebrow">Exhibit B — how it works</p>
+  <h2>Findings you can act on, not fear.</h2>
+  <p class="lede">Traditional security hands you a 40-page PDF. We hand you prompts,
+  because that's the tool you're already holding.</p>
+  <div class="steps">
+    <div class="step"><h3>Paste your target</h3>
+      <p>A public GitHub repo or your live URL. Takes ten seconds, no account.</p></div>
+    <div class="step"><h3>We hunt, you watch</h3>
+      <p>A four-engine stack plus detectors tuned to AI-written code. Every finding carries redacted proof it's real.</p></div>
+    <div class="step"><h3>Paste fixes back</h3>
+      <p>Each finding becomes a prompt written for Cursor, Claude or Lovable: what's broken, exactly what to change, how to verify.</p></div>
+  </div>
+</div></section>
 
-<p style="color:#8b949e;font-size:.85rem;margin-bottom:2rem">
-  Public repos / sites you have rights to scan only. Secrets in reports are always
-  redacted. Limit 5 scans per day.
-</p>
-</div>
+<section><div class="wrap">
+  <p class="ex-eyebrow">Exhibit C — the ladder</p>
+  <h2>Free proves it. Paid keeps you safe.</h2>
+  <p class="lede">No "contact sales". Prices on the wall.</p>
+  <div class="tiers">
+    <div class="tier">
+      <span class="per">CHECKUP</span>
+      <div class="price">$0</div><span class="per">one scan, forever free</span>
+      <ul><li>Full repo or site scan</li><li>Verdict + fix prompts</li><li>Redacted evidence</li></ul>
+      <a class="btn ghost" href="#checkup">Start below</a>
+    </div>
+    <div class="tier hot">
+      <span class="per">WATCH</span>
+      <div class="price">$49<sup style="font-size:16px">/mo</sup></div><span class="per">per repo · cancel anytime</span>
+      <ul><li>Weekly re-scan while you build</li><li>Email only when something new appears</li><li>New findings arrive as fix prompts</li></ul>
+      <a class="btn primary" href="#checkup">Scan first, then decide</a>
+    </div>
+    <div class="tier">
+      <span class="per">VIBECHECK AUDIT</span>
+      <div class="price">$299</div><span class="per">one-off · human-reviewed</span>
+      <ul><li>Everything in Watch, once, deeper</li><li>30-minute walkthrough call</li><li>Two weeks of follow-up questions</li></ul>
+      <a class="btn ghost" href="#checkup">Run a free scan first</a>
+    </div>
+  </div>
+</div></section>
 
-<section style="max-width:640px;margin:0 auto 3rem">
-  <h2>What you get back</h2>
-  <ol>
-    <li><strong>A plain verdict.</strong> "We found 2 live secrets and an open admin endpoint." No severity matrices.</li>
-    <li><strong>Fix prompts.</strong> One per finding, written to paste straight into your editor: what's wrong, exactly what to change, how to verify it worked.</li>
-    <li><strong>Redacted evidence.</strong> Receipts that the finding is real, with secrets masked.</li>
-  </ol>
-  <h2>Repo vs site?</h2>
-  <p>The repo scan reads source code and finds deeper wounds (injection, missing auth,
-  secrets in git history). The site scan probes what's exposed on the internet right now
-  (open .env files, visible .git folders, expired certificates, broken links). If you can,
-  run both.</p>
-  <h2>Why free</h2>
-  <p>Because if we find something scary enough, some people want us to keep watching weekly
-  (<strong>$49/mo</strong>) or do a full human-reviewed audit with a walkthrough call
-  (<strong>$299</strong>). The free scan is how you decide if we're worth it.</p>
-</section>
+<section id="checkup"><div class="wrap">
+  <p class="ex-eyebrow" style="justify-content:center">Open file — run yours now</p>
+  <h2 style="text-align:center">The free checkup.</h2>
+  <p class="lede" style="text-align:center;margin:0 auto 34px">Report lands in a few minutes
+  for repos; live sites finish in seconds.</p>
 
-</div>
+  <div class="panel-form">
+    <div class="tabs">
+      <button id="tab-repo" class="on" type="button">GitHub repo</button>
+      <button id="tab-site" type="button">Live site</button>
+    </div>
 
-<footer class="site"><div class="wrap">
-  <p>Patchhound · evidence-based security · <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a></p>
+    <form id="form-repo" class="f">
+      <label for="repo">Public GitHub repo</label>
+      <input id="repo" type="text" placeholder="yourname/your-app" autocomplete="off" required>
+      <label for="email-r">Email for the report</label>
+      <input id="email-r" type="email" placeholder="you@yourapp.com" required>
+      <button class="submit" id="go-r" type="submit">Run my checkup →</button>
+      <div class="msg" id="msg-r"></div>
+    </form>
+
+    <form id="form-site" class="f" hidden>
+      <label for="site-url">Your live site</label>
+      <input id="site-url" type="text" placeholder="https://yourapp.com" autocomplete="off" required>
+      <label for="email-s">Email for the report</label>
+      <input id="email-s" type="email" placeholder="you@yourapp.com" required>
+      <p class="consent"><input type="checkbox" id="consent" required>
+        <span>I own this site or am authorized to have it scanned.</span></p>
+      <button class="submit" id="go-s" type="submit">Check my live site →</button>
+      <div class="msg" id="msg-s"></div>
+    </form>
+
+    <p class="privacy-note">Public targets only · secrets always redacted · max 5 scans/day</p>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Patchhound — evidence-based security studio</span>
+  <span><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a> · patchhound.dev</span>
 </div></footer>
 
 <script>
-const API = "https://bronze-physiology-heating-panels.trycloudflare.com";
-const tabR = document.getElementById('tab-repo'), tabS = document.getElementById('tab-site');
-const fR = document.getElementById('form-repo'), fS = document.getElementById('form-site');
-function show(which){
-  const repo = which === 'repo';
-  fR.hidden = !repo; fS.hidden = repo;
-  tabR.classList.toggle('on', repo); tabS.classList.toggle('on', !repo);
+/* ---- verdict strip loop (signature) ---- */
+const LINES = [
+  '<span class="ln">&gt; scanning <b>your-app</b> @ main …</span>',
+  '<span class="ln">live secret <span class="redact">sk_live_51H8</span>•••• in <b>src/Payment.jsx:1</b></span>',
+  '<span class="ln">POST <b>/api/orders</b> reachable with no auth <b>[critical]</b></span>',
+  '<span class="ln">SQL string built from user input <b>[high]</b></span>',
+  '<span class="ln ok">verdict: 2 critical, 1 high — fix prompts generated ✓</span>'
+];
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const feed = document.getElementById('feed');
+function play(){
+  feed.innerHTML = '';
+  let i = 0;
+  const next = () => {
+    if (i >= LINES.length){ setTimeout(play, 4200); return; }
+    const d = document.createElement('div'); d.innerHTML = LINES[i++];
+    while (d.firstChild) feed.appendChild(d.firstChild);
+    setTimeout(next, i === LINES.length ? 300 : 850);
+  };
+  next();
 }
-tabR.onclick = () => show('repo');
-tabS.onclick = () => show('site');
+reduced ? LINES.forEach(l => { const d=document.createElement('div'); d.innerHTML=l; while(d.firstChild) feed.appendChild(d.firstChild); })
+        : play();
 
-fR.addEventListener('submit', async (e) => {
+/* ---- tabs ---- */
+const tabR=document.getElementById('tab-repo'), tabS=document.getElementById('tab-site');
+const fR=document.getElementById('form-repo'), fS=document.getElementById('form-site');
+function show(repo){ fR.hidden=!repo; fS.hidden=repo;
+  tabR.classList.toggle('on',repo); tabS.classList.toggle('on',!repo);}
+tabR.onclick=()=>show(true); tabS.onclick=()=>show(false);
+
+const API="https://bronze-physiology-heating-panels.trycloudflare.com";
+/* ---- repo submit ---- */
+fR.addEventListener('submit', async e => {
   e.preventDefault();
-  const msg = document.getElementById('msg');
-  const btn = document.getElementById('go');
-  btn.disabled = true; btn.textContent = 'Queued...';
-  msg.textContent = '';
-  try {
-    const r = await fetch(API + '/api/checkup', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        repo: document.getElementById('repo').value.trim(),
-        email: document.getElementById('email-r').value.trim()
-      })
-    });
-    const d = await r.json();
-    if (r.ok) {
-      msg.style.color = '#3fb950';
-      msg.textContent = 'Queued! Scans take a few minutes; your report link is on its way to your inbox.';
-      fR.reset();
-    } else {
-      msg.style.color = '#f85149';
-      msg.textContent = d.error || 'Something went wrong.';
-    }
-  } catch (err) {
-    msg.style.color = '#f85149';
-    msg.textContent = 'Could not reach the scanner. Try again shortly.';
-  }
-  btn.disabled = false; btn.textContent = 'Run my free checkup';
+  const msg=document.getElementById('msg-r'), btn=document.getElementById('go-r');
+  btn.disabled=true; btn.textContent='Queuing…'; msg.textContent=''; msg.className='msg';
+  try{
+    const r=await fetch(API+'/api/checkup',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({repo:document.getElementById('repo').value.trim(),
+                           email:document.getElementById('email-r').value.trim()})});
+    const d=await r.json();
+    if(r.ok){msg.classList.add('ok');msg.textContent='Queued. Scans take a few minutes; your report link is headed to your inbox.';fR.reset();}
+    else{msg.classList.add('err');msg.textContent=d.error||'Something went wrong.';}
+  }catch(_){msg.classList.add('err');msg.textContent='Could not reach the scanner. Try again shortly.';}
+  btn.disabled=false; btn.textContent='Run my checkup →';
 });
-
-fS.addEventListener('submit', async (e) => {
+/* ---- site submit ---- */
+fS.addEventListener('submit', async e => {
   e.preventDefault();
-  const msg = document.getElementById('msg-s');
-  const btn = document.getElementById('go-s');
-  btn.disabled = true; btn.textContent = 'Checking...';
-  msg.textContent = '';
-  try {
-    const r = await fetch(API + '/api/sitescan', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        url: document.getElementById('site-url').value.trim(),
-        email: document.getElementById('email-s').value.trim(),
-        consent: true
-      })
-    });
-    const d = await r.json();
-    if (r.ok) {
-      msg.style.color = '#3fb950';
-      msg.innerHTML = 'Done! Your report: <a style="color:#3fb950" href="' + d.url + '">open it here</a>. A copy is also headed to your inbox.';
-      fS.reset();
-    } else {
-      msg.style.color = '#f85149';
-      msg.textContent = d.error || 'Something went wrong.';
-    }
-  } catch (err) {
-    msg.style.color = '#f85149';
-    msg.textContent = 'Could not reach the scanner. Try again shortly.';
-  }
-  btn.disabled = false; btn.textContent = 'Check my live site';
+  const msg=document.getElementById('msg-s'), btn=document.getElementById('go-s');
+  btn.disabled=true; btn.textContent='Scanning…'; msg.textContent=''; msg.className='msg';
+  try{
+    const r=await fetch(API+'/api/sitescan',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({url:document.getElementById('site-url').value.trim(),
+                           email:document.getElementById('email-s').value.trim(),
+                           consent:true})});
+    const d=await r.json();
+    if(r.ok){msg.classList.add('ok');
+      msg.innerHTML='Done. Report: <a style="color:var(--stamp)" href="'+d.url+'">open it here</a>. A copy is also headed to your inbox.';
+      fS.reset();}
+    else{msg.classList.add('err');msg.textContent=d.error||'Something went wrong.';}
+  }catch(_){msg.classList.add('err');msg.textContent='Could not reach the scanner. Try again shortly.';}
+  btn.disabled=false; btn.textContent='Check my live site →';
 });
 </script>
-
 </body>
 </html>

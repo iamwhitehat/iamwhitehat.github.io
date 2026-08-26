@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unlock your full report | Patchhound</title>
+<meta name="description" content="Unlock every finding from your security checkup with copy-paste fix prompts. €13 one-time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#0C0E12;--panel:#14171E;--panel2:#181C25;--line:#262B36;
+--ink:#E8EBF0;--mut:#939CAE;--blood:#FF4D3D;--stamp:#37D67A;
+--serif:'Instrument Serif',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;
+--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans)}
+a{color:var(--blood)}
+.wrap{max-width:760px;margin:0 auto;padding:48px 24px}
+:focus-visible{outline:2px solid var(--blood);outline-offset:3px;border-radius:4px}
+.kick{font-family:var(--mono);font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
+color:var(--mut);display:flex;align-items:center;gap:10px}
+.kick::before{content:"";width:4px;height:14px;background:var(--blood);border-radius:1px}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,50px);line-height:1.05;margin:18px 0 14px}
+h1 em{font-style:italic;color:var(--blood)}
+.sub{color:var(--mut);margin-bottom:36px;font-size:17px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:32px;margin-bottom:22px;position:relative}
+.card.hot{border-color:rgba(255,77,61,.55)}
+.badge{position:absolute;top:-11px;left:26px;background:var(--blood);color:#fff;
+font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;padding:4px 11px;border-radius:3px}
+.tname{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--mut);text-transform:uppercase}
+.price{font-family:var(--serif);font-size:52px;line-height:1;margin:12px 0 4px}
+.price small{font-size:18px;color:var(--mut);font-family:var(--sans)}
+.per{color:var(--mut);font-size:14px;margin-bottom:22px}
+ul{list-style:none;margin:0 0 26px;display:grid;gap:11px}
+li{padding-left:24px;position:relative;color:var(--ink-soft);font-size:15px}
+li::before{content:"—";position:absolute;left:0;color:var(--blood)}
+.btn{display:block;text-align:center;background:var(--blood);color:#fff;text-decoration:none;
+font-weight:700;font-size:16px;padding:16px;border-radius:11px;transition:filter .15s,transform .15s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.note{text-align:center;color:var(--mut);font-size:12.5px;margin-top:14px}
+.fine{color:var(--mut);font-size:13px;margin-top:30px;line-height:1.7}
+.fine a{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kick">Patchhound · unlock</p>
+  <h1>You saw the first one.<br>There are <em>more.</em></h1>
+  <p class="sub">Your free scan found real issues in your app. The first is yours free,
+  with its fix prompt. The rest are one click away — every one with a copy-paste
+  fix prompt for Cursor, Claude or Lovable.</p>
+
+  <div class="card hot">
+    <span class="badge">MOST PEOPLE PICK THIS</span>
+    <div class="tname">Full report — one-time</div>
+    <div class="price">€13</div>
+    <div class="per">paid once · report stays online forever</div>
+    <ul>
+      <li>Every finding, exact file and line</li>
+      <li>A copy-paste fix prompt for each one</li>
+      <li>Redacted proof each finding is real</li>
+      <li>Fixed in your editor within the hour</li>
+    </ul>
+    <a class="btn" href="__LS_UNLOCK_LINK__">Unlock my full report — €13</a>
+    <p class="note">2-minute checkout · card or PayPal</p>
+  </div>
+
+  <div class="card" id="watch">
+    <div class="tname">Daily Watch</div>
+    <div class="price">€49<small>/month</small></div>
+    <div class="per">per app · cancel anytime · keep every report</div>
+    <ul>
+      <li>Full report included from day one</li>
+      <li>Re-scans your app every 24 hours</li>
+      <li>Emails you only when something NEW appears</li>
+      <li>New findings arrive as fix prompts, same as today</li>
+    </ul>
+    <a class="btn" href="__LS_WATCH_LINK__" style="background:var(--panel2);border:1px solid var(--line)">Start watching my app — €49/mo</a>
+    <p class="note">The scan you just ran, every single day.</p>
+  </div>
+
+  <p class="fine">Questions first? <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>.
+  Payments handled by Lemon Squeezy (merchant of record). We publish nothing about
+  your app without written permission. Verify every fix prompt before running it in prod —
+  you are the last gate, always.</p>
+</div>
+<script>
+/* swap in real Lemon Squeezy links when configured */
+const LS = "__LS_LINKS_SET__";
+if (LS !== "YES") {
+  document.querySelectorAll("a.btn").forEach(a => {
+    a.href = "mailto:hello@patchhound.dev?subject=Unlock%20request";
+  });
+}
+</script>
+</body>
+</html>

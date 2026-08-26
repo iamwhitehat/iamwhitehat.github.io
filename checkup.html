@@ -3,69 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Patchhound — your AI-built app, read like a case file</title>
-<meta name="description" content="Built with Cursor or Lovable? Paste your public repo or live site. Get every security hole as a fix prompt you can paste back into your editor. Free checkup.">
+<title>Is your AI-built app safe? Find out free | Patchhound</title>
+<meta name="description" content="Built your app with Cursor or Lovable? Paste your repo or site URL. We show you what's exposed — free. Unlock every hole with a fix prompt for €13.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ============ tokens ============ */
-:root{
-  --paper:#0C0E12; --panel:#14171E; --panel2:#181C25;
-  --line:#262B36; --ink:#E8EBF0; --mut:#939CAE;
-  --blood:#FF4D3D; --stamp:#37D67A;
-  --serif:'Instrument Serif',Georgia,serif;
-  --sans:'Public Sans',system-ui,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-}
+:root{--paper:#0C0E12;--panel:#14171E;--panel2:#181C25;--line:#262B36;
+--ink:#E8EBF0;--mut:#939CAE;--blood:#FF4D3D;--stamp:#37D67A;
+--serif:'Instrument Serif',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;
+--mono:'JetBrains Mono',ui-monospace,monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation:none!important;transition:none!important}
-}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}
+*,*::before,*::after{animation:none!important;transition:none!important}}
 body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans)}
 a{color:inherit}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 :focus-visible{outline:2px solid var(--blood);outline-offset:3px;border-radius:4px}
 
-/* ============ nav ============ */
 header{position:sticky;top:0;z-index:50;background:rgba(12,14,18,.88);
-  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;letter-spacing:.02em}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700}
 .brand .mark{width:28px;height:28px;border:1.5px solid var(--blood);border-radius:7px;
-  display:grid;place-items:center;color:var(--blood);font-family:var(--mono);font-size:15px;font-weight:700}
+display:grid;place-items:center;color:var(--blood);font-family:var(--mono);font-size:15px;font-weight:700}
 .brand small{color:var(--mut);font-weight:400;display:block;font-size:11px;margin-top:-2px}
 nav.links{display:flex;gap:26px;align-items:center;font-size:14px}
 nav.links a{text-decoration:none;color:var(--mut);transition:color .15s}
 nav.links a:hover{color:var(--ink)}
-nav.links a.cta{color:var(--blood);border:1px solid rgba(255,77,61,.4);padding:8px 16px;border-radius:8px;font-weight:600}
-nav.links a.cta:hover{background:rgba(255,77,61,.08);border-color:var(--blood)}
+nav.links a.cta{color:#fff;background:var(--blood);padding:8px 16px;border-radius:8px;font-weight:600}
 @media(max-width:760px){nav.links a:not(.cta){display:none}}
 
-/* ============ hero ============ */
-.hero{padding:96px 0 56px;position:relative}
-.kicker{font-family:var(--mono);font-size:12px;color:var(--mut);letter-spacing:.14em;
-  text-transform:uppercase;display:flex;align-items:center;gap:10px}
-.kicker::before{content:"";width:22px;height:2px;background:var(--blood)}
-.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,7vw,84px);
-  line-height:1.02;letter-spacing:-.01em;margin:22px 0 0;max-width:900px}
+.hero{padding:88px 0 48px;text-align:center}
+.kick{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--mut);display:inline-flex;align-items:center;gap:10px}
+.kick::before,.kick::after{content:"";width:22px;height:2px;background:var(--blood)}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(42px,6.5vw,76px);
+line-height:1.03;margin:24px auto 0;max-width:900px}
 .hero h1 em{font-style:italic;color:var(--blood)}
-.hero p.sub{max-width:560px;color:var(--mut);margin:26px 0 34px;font-size:17px}
-.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:15px;
-  padding:14px 26px;border-radius:10px;transition:transform .15s, box-shadow .15s}
-.btn.primary{background:var(--blood);color:#fff;box-shadow:0 0 0 0 rgba(255,77,61,.35)}
-.btn.primary:hover{transform:translateY(-1px);box-shadow:0 6px 24px -6px rgba(255,77,61,.45)}
-.btn.ghost{border:1px solid var(--line);color:var(--ink)}
-.btn.ghost:hover{border-color:var(--mut)}
-.hero .btns{display:flex;gap:14px;flex-wrap:wrap}
+.hero p.sub{color:var(--mut);margin:24px auto 34px;font-size:18px;max-width:600px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:16px;
+padding:16px 30px;border-radius:11px;transition:transform .15s,filter .15s}
+.btn.primary{background:var(--blood);color:#fff}
+.btn.primary:hover{transform:translateY(-1px);filter:brightness(1.08)}
 
-/* verdict strip */
-.strip{margin-top:64px;border:1px solid var(--line);border-radius:12px;background:var(--panel);
-  overflow:hidden}
+.strip{margin:56px auto 0;max-width:860px;border:1px solid var(--line);border-radius:12px;
+background:var(--panel);overflow:hidden;text-align:left}
 .strip .bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);
-  font-family:var(--mono);font-size:12px;color:var(--mut)}
+font-family:var(--mono);font-size:12px;color:var(--mut)}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
 .dot.r{background:#3d2226}.dot.y{background:#3b3524}.dot.g{background:#22392c}
 .strip .bar span{margin-left:auto}
@@ -77,13 +63,15 @@ nav.links a.cta:hover{background:rgba(255,77,61,.08);border-color:var(--blood)}
 @keyframes reveal{to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.feed .ln{opacity:1;transform:none}}
 
-/* ============ exhibits ============ */
 section{padding:72px 0}
-.ex-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--mut);display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.ex-eyebrow::before{content:"";width:4px;height:16px;background:var(--blood);border-radius:1px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--mut);display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.eyebrow::before{content:"";width:4px;height:16px;background:var(--blood);border-radius:1px}
 h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,44px);line-height:1.1;margin-bottom:14px}
-.lede{color:var(--mut);max-width:640px;margin-bottom:40px}
+.lede{color:var(--mut);max-width:640px;margin-bottom:40px;font-size:17px}
+.center{text-align:center}
+.center .eyebrow{justify-content:center}
+.center .lede{margin-left:auto;margin-right:auto}
 
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:860px){.duo{grid-template-columns:1fr}}
@@ -92,8 +80,9 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,44px);line-
 .card:hover::before{background:var(--blood)}
 .card h3{font-family:var(--serif);font-weight:400;font-size:26px;margin-bottom:6px}
 .card p.tag{font-family:var(--mono);font-size:12px;color:var(--mut);margin-bottom:18px}
+.card p.desc{color:var(--ink-soft);font-size:15px;margin-bottom:16px}
 .term{background:#090B0F;border:1px solid var(--line);border-radius:8px;padding:16px;
-  font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--mut)}
+font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--mut)}
 .term b{color:var(--ink);font-weight:500}
 .term .bad{color:var(--blood)}
 .term .good{color:var(--stamp)}
@@ -105,42 +94,41 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,44px);line-
 .step h3{font-size:17px;margin:12px 0 8px}
 .step p{color:var(--mut);font-size:14.5px}
 
-/* pricing */
 .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
 @media(max-width:860px){.tiers{grid-template-columns:1fr}}
 .tier{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px;display:flex;flex-direction:column}
 .tier.hot{border-color:rgba(255,77,61,.55);position:relative}
-.tier.hot::after{content:"MOST PICKED";position:absolute;top:-11px;left:24px;background:var(--blood);color:#fff;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:4px 10px;border-radius:3px}
+.tier.hot::after{content:"START HERE";position:absolute;top:-11px;left:24px;background:var(--blood);color:#fff;
+font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:4px 10px;border-radius:3px}
 .tier .price{font-family:var(--serif);font-size:44px;line-height:1;margin:14px 0 2px}
 .tier .price sup{font-size:16px;color:var(--mut);font-family:var(--mono)}
 .tier .per{font-family:var(--mono);font-size:12px;color:var(--mut)}
 .tier ul{list-style:none;margin:22px 0;display:grid;gap:10px;font-size:14.5px;color:var(--mut)}
 .tier li::before{content:"—";color:var(--blood);margin-right:8px}
-.tier .btn{justify-content:center;margin-top:auto}
+.tier .btn{justify-content:center;margin-top:auto;text-align:center}
+.btn.ghost{border:1px solid var(--line-hard);color:var(--ink);font-weight:600;font-size:15px;padding:13px 20px}
+.btn.ghost:hover{border-color:var(--mut)}
 
-/* form */
 #checkup .panel-form{max-width:720px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:34px}
 .tabs{display:flex;gap:8px;margin-bottom:26px}
 .tabs button{flex:1;background:transparent;border:1px solid var(--line);color:var(--mut);
-  padding:11px;border-radius:9px;font:600 14px var(--sans);cursor:pointer;transition:all .15s}
+padding:11px;border-radius:9px;font:600 14px var(--sans);cursor:pointer;transition:all .15s}
 .tabs button.on{background:var(--panel2);border-color:rgba(255,77,61,.5);color:var(--ink)}
 .f label{display:block;font:600 13.5px var(--sans);margin:0 0 7px}
-.f input[type=text],.f input[type=email],.f input:not([type]){width:100%;padding:13px 15px;font:14px var(--mono);
-  background:#090B0F;color:var(--ink);border:1px solid var(--line);border-radius:9px;margin-bottom:18px}
+.f input{width:100%;padding:13px 15px;font:14px var(--mono);
+background:#090B0F;color:var(--ink);border:1px solid var(--line);border-radius:9px;margin-bottom:18px}
 .f input:focus{outline:none;border-color:rgba(255,77,61,.6)}
 .f input::placeholder{color:#4c5666}
 .consent{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--mut);margin-bottom:20px}
-.consent input{accent-color:var(--blood);margin-top:3px}
+.consent input{accent-color:var(--blood);margin-top:3px;width:auto}
 .submit{width:100%;background:var(--blood);color:#fff;border:none;padding:15px;border-radius:10px;
-  font:700 15px var(--sans);cursor:pointer;transition:filter .15s}
-.submit:hover{filter:brightness(1.1)}
+font:700 15px var(--sans);cursor:pointer;transition:filter .15s}
+.submit:hover{filter:brightness(1.08)}
 .submit[disabled]{opacity:.6;cursor:wait}
 .msg{min-height:22px;font-size:13.5px;margin-top:12px;font-family:var(--mono)}
 .msg.ok{color:var(--stamp)}.msg.err{color:var(--blood)}
 .privacy-note{text-align:center;color:var(--mut);font-size:12.5px;margin-top:18px}
 
-/* footer */
 footer{border-top:1px solid var(--line);padding:36px 0;color:var(--mut);font-size:13.5px}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 footer a{color:var(--mut)}
@@ -157,105 +145,100 @@ footer a{color:var(--mut)}
     <a href="/">Hunt log</a>
     <a href="/services.html">Services</a>
     <a href="/about.html">Method</a>
-    <a class="cta" href="#checkup">Free checkup</a>
+    <a class="cta" href="#checkup">Free scan</a>
   </nav>
 </div></header>
 
 <div class="hero wrap">
-  <p class="kicker">Patchhound · evidence-based security</p>
-  <h1>Your app was written fast.<br>We read it like <em>detectives.</em></h1>
-  <p class="sub">Cursor and Lovable build in hours and leak the same way every time:
-  keys where visitors can read them, endpoints anyone can call. Paste your repo or URL.
-  Get every hole as a fix prompt you paste straight back into your editor.</p>
-  <div class="btns">
-    <a class="btn primary" href="#checkup">Run the free checkup</a>
-    <a class="btn ghost" href="#exhibit-a">See what we find</a>
-  </div>
+  <p class="kick">Free security scan</p>
+  <h1>You built your app in a weekend.<br>Someone else can <em>walk into it.</em></h1>
+  <p class="sub">Apps built with Cursor, Lovable or Claude leak the same way every time:
+  passwords where anyone can read them, doors anyone can walk through.
+  Paste your app below and see for yourself — free.</p>
+  <a class="btn primary" href="#checkup">Scan my app — free</a>
 
   <div class="strip" aria-hidden="true">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-      patchhound · live scan feed<span>demo output, secrets redacted</span></div>
+      patchhound · live scan feed<span>demo output, secrets hidden</span></div>
     <div class="feed" id="feed"></div>
   </div>
 </div>
 
-<section id="exhibit-a"><div class="wrap">
-  <p class="ex-eyebrow">Exhibit A — two ways in</p>
-  <h2>Scan the source, or scan what's live.</h2>
-  <p class="lede">The repo scan reads your code and git history for deeper wounds.
-  The site scan probes what the internet can touch right now. Run both if you can.</p>
+<section><div class="wrap">
+  <p class="eyebrow">What the scan looks for</p>
+  <h2>The same holes, every time.</h2>
+  <p class="lede">AI tools write amazing code and forget the same things.
+  We check your app for all of them.</p>
   <div class="duo">
     <div class="card">
-      <h3>Repo scan</h3>
-      <p class="tag">source + git history · public repos</p>
+      <h3>In your code</h3>
+      <p class="tag">paste a GitHub repo</p>
       <div class="term">
-        <b>found</b> sk_live_51H8••••••• <span class="bad">in src/Payment.jsx</span><br>
-        &nbsp;&nbsp;→ ships to every visitor's browser<br>
-        <b>found</b> POST /api/orders <span class="bad">no auth check</span><br>
-        <b>found</b> SQL built from req.query <span class="bad">injectable</span><br>
-        <span class="good">fix prompts ready: 3</span>
+        <b>found</b> app password <span class="bad">visible to visitors</span><br>
+        <b>found</b> admin page <span class="bad">works with no login</span><br>
+        <b>found</b> database query <span class="bad">anyone can tamper with</span><br>
+        <span class="good">each one: a fix you can paste in</span>
       </div>
     </div>
     <div class="card">
-      <h3>Live-site scan</h3>
-      <p class="tag">deployed app · what's exposed now</p>
+      <h3>On your live site</h3>
+      <p class="tag">paste your URL</p>
       <div class="term">
-        <b>probe</b> /.env <span class="bad">downloadable</span><br>
-        <b>probe</b> /.git/HEAD <span class="bad">readable</span><br>
-        <b>probe</b> /assets/app.js.map <span class="bad">source exposed</span><br>
-        <b>probe</b> TLS cert <span class="good">valid 74 days</span><br>
-        <span class="good">fix prompts ready: 3</span>
+        <b>probe</b> settings file <span class="bad">publicly downloadable</span><br>
+        <b>probe</b> source code <span class="bad">readable by anyone</span><br>
+        <b>probe</b> admin docs <span class="bad">open to the internet</span><br>
+        <span class="good">each one: a fix you can paste in</span>
       </div>
     </div>
   </div>
 </div></section>
 
 <section><div class="wrap">
-  <p class="ex-eyebrow">Exhibit B — how it works</p>
-  <h2>Findings you can act on, not fear.</h2>
-  <p class="lede">Traditional security hands you a 40-page PDF. We hand you prompts,
-  because that's the tool you're already holding.</p>
+  <p class="eyebrow">How it goes</p>
+  <h2>Scan free. See the first hole. Fix everything for €13.</h2>
+  <p class="lede">No signup, no sales call. Here's the whole thing:</p>
   <div class="steps">
-    <div class="step"><h3>Paste your target</h3>
-      <p>A public GitHub repo or your live URL. Takes ten seconds, no account.</p></div>
-    <div class="step"><h3>We hunt, you watch</h3>
-      <p>A four-engine stack plus detectors tuned to AI-written code. Every finding carries redacted proof it's real.</p></div>
-    <div class="step"><h3>Paste fixes back</h3>
-      <p>Each finding becomes a prompt written for Cursor, Claude or Lovable: what's broken, exactly what to change, how to verify.</p></div>
+    <div class="step"><h3>Paste your app</h3>
+      <p>A GitHub repo or your site's URL. Ten seconds, no account.</p></div>
+    <div class="step"><h3>See what's open</h3>
+      <p>The scan is free. You get the verdict and the worst finding, with proof it's real.</p></div>
+    <div class="step"><h3>Fix them all</h3>
+      <p>€13 unlocks every finding — each with a paste-ready fix for Cursor or Claude. Or let the Daily Watch keep guard for you.</p></div>
   </div>
 </div></section>
 
 <section><div class="wrap">
-  <p class="ex-eyebrow">Exhibit C — the ladder</p>
-  <h2>Free proves it. Paid keeps you safe.</h2>
-  <p class="lede">No "contact sales". Prices on the wall.</p>
+  <p class="eyebrow">After the scan</p>
+  <h2>Fix it once. Then keep it fixed.</h2>
+  <p class="lede">You'll ship new code every week. New code means new holes.
+  The Daily Watch is the scan you just ran, every 24 hours, watching your back.</p>
   <div class="tiers">
     <div class="tier">
-      <span class="per">CHECKUP</span>
-      <div class="price">$0</div><span class="per">one scan, forever free</span>
-      <ul><li>Full repo or site scan</li><li>Verdict + fix prompts</li><li>Redacted evidence</li></ul>
+      <span class="per">THE SCAN</span>
+      <div class="price">Free</div><span class="per">one look, on the house</span>
+      <ul><li>Full scan of repo or site</li><li>Your verdict + worst finding, free</li><li>Proof it's real, secrets hidden</li></ul>
       <a class="btn ghost" href="#checkup">Start below</a>
     </div>
     <div class="tier hot">
-      <span class="per">WATCH</span>
-      <div class="price">$49<sup style="font-size:16px">/mo</sup></div><span class="per">per repo · cancel anytime</span>
-      <ul><li>Weekly re-scan while you build</li><li>Email only when something new appears</li><li>New findings arrive as fix prompts</li></ul>
-      <a class="btn primary" href="#checkup">Scan first, then decide</a>
+      <span class="per">FULL REPORT</span>
+      <div class="price">€13</div><span class="per">once · yours forever</span>
+      <ul><li>Every finding, exact file and line</li><li>A paste-ready fix for each one</li><li>Fixed before lunch, literally</li></ul>
+      <a class="btn primary" href="#checkup">Scan first, then unlock</a>
     </div>
     <div class="tier">
-      <span class="per">VIBECHECK AUDIT</span>
-      <div class="price">$299</div><span class="per">one-off · human-reviewed</span>
-      <ul><li>Everything in Watch, once, deeper</li><li>30-minute walkthrough call</li><li>Two weeks of follow-up questions</li></ul>
-      <a class="btn ghost" href="#checkup">Run a free scan first</a>
+      <span class="per">DAILY WATCH</span>
+      <div class="price">€49<sup>/mo</sup></div><span class="per">per app · cancel anytime</span>
+      <ul><li>Full report included day one</li><li>Re-scanned every 24 hours</li><li>Emails only when something new appears</li></ul>
+      <a class="btn ghost" href="#checkup">Scan first, then decide</a>
     </div>
   </div>
 </div></section>
 
 <section id="checkup"><div class="wrap">
-  <p class="ex-eyebrow" style="justify-content:center">Open file — run yours now</p>
-  <h2 style="text-align:center">The free checkup.</h2>
-  <p class="lede" style="text-align:center;margin:0 auto 34px">Report lands in a few minutes
-  for repos; live sites finish in seconds.</p>
+  <p class="eyebrow" style="justify-content:center">Open file — run yours now</p>
+  <h2 class="center" style="text-align:center">The free scan.</h2>
+  <p class="lede center" style="margin:0 auto 34px">Repos take a few minutes.
+  Live sites finish in seconds.</p>
 
   <div class="panel-form">
     <div class="tabs">
@@ -268,7 +251,7 @@ footer a{color:var(--mut)}
       <input id="repo" type="text" placeholder="yourname/your-app" autocomplete="off" required>
       <label for="email-r">Email for the report</label>
       <input id="email-r" type="email" placeholder="you@yourapp.com" required>
-      <button class="submit" id="go-r" type="submit">Run my checkup →</button>
+      <button class="submit" id="go-r" type="submit">Scan my app — free →</button>
       <div class="msg" id="msg-r"></div>
     </form>
 
@@ -283,7 +266,7 @@ footer a{color:var(--mut)}
       <div class="msg" id="msg-s"></div>
     </form>
 
-    <p class="privacy-note">Public targets only · secrets always redacted · max 5 scans/day</p>
+    <p class="privacy-note">Public targets only · secrets always hidden · max 5 scans/day</p>
   </div>
 </div></section>
 
@@ -293,13 +276,12 @@ footer a{color:var(--mut)}
 </div></footer>
 
 <script>
-/* ---- verdict strip loop (signature) ---- */
 const LINES = [
   '<span class="ln">&gt; scanning <b>your-app</b> @ main …</span>',
-  '<span class="ln">live secret <span class="redact">sk_live_51H8</span>•••• in <b>src/Payment.jsx:1</b></span>',
-  '<span class="ln">POST <b>/api/orders</b> reachable with no auth <b>[critical]</b></span>',
-  '<span class="ln">SQL string built from user input <b>[high]</b></span>',
-  '<span class="ln ok">verdict: 2 critical, 1 high — fix prompts generated ✓</span>'
+  '<span class="ln">live password <span class="redact">Adm••••</span>••• in <b>src/config.js:14</b></span>',
+  '<span class="ln">admin page reachable with no login <b>[critical]</b></span>',
+  '<span class="ln">database query accepts tampered input <b>[high]</b></span>',
+  '<span class="ln ok">verdict: 2 critical, 1 high — first finding is free ✓</span>'
 ];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const feed = document.getElementById('feed');
@@ -317,7 +299,6 @@ function play(){
 reduced ? LINES.forEach(l => { const d=document.createElement('div'); d.innerHTML=l; while(d.firstChild) feed.appendChild(d.firstChild); })
         : play();
 
-/* ---- tabs ---- */
 const tabR=document.getElementById('tab-repo'), tabS=document.getElementById('tab-site');
 const fR=document.getElementById('form-repo'), fS=document.getElementById('form-site');
 function show(repo){ fR.hidden=!repo; fS.hidden=repo;
@@ -325,7 +306,6 @@ function show(repo){ fR.hidden=!repo; fS.hidden=repo;
 tabR.onclick=()=>show(true); tabS.onclick=()=>show(false);
 
 const API="https://bronze-physiology-heating-panels.trycloudflare.com";
-/* ---- repo submit ---- */
 fR.addEventListener('submit', async e => {
   e.preventDefault();
   const msg=document.getElementById('msg-r'), btn=document.getElementById('go-r');
@@ -339,9 +319,8 @@ fR.addEventListener('submit', async e => {
     if(r.ok){msg.classList.add('ok');msg.textContent='Queued. Scans take a few minutes; your report link is headed to your inbox.';fR.reset();}
     else{msg.classList.add('err');msg.textContent=d.error||'Something went wrong.';}
   }catch(_){msg.classList.add('err');msg.textContent='Could not reach the scanner. Try again shortly.';}
-  btn.disabled=false; btn.textContent='Run my checkup →';
+  btn.disabled=false; btn.textContent='Scan my app — free →';
 });
-/* ---- site submit ---- */
 fS.addEventListener('submit', async e => {
   e.preventDefault();
   const msg=document.getElementById('msg-s'), btn=document.getElementById('go-s');

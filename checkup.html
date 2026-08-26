@@ -2,72 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Free Site Checkup — Patchhound</title>
-<meta name="description" content="Run a free, instant technical checkup on your website. SSL, uptime, exposed files, broken contact links. No signup.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free checkup: paste your repo, get fix prompts | Patchhound</title>
+<meta name="description" content="Built your app with AI (Cursor, Lovable, Claude)? Paste your public GitHub repo and get a security checkup with copy-paste fix prompts. Free.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=JetBrains+Mono:wght@400;500;600&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
-<style>
-/* checkup-tool specifics only; everything else inherits the case-file system */
-.scanbox{
-  background:var(--card);border:2px solid var(--ink);border-radius:10px;
-  box-shadow:var(--shadow);
-  padding:28px;margin:36px auto 0;max-width:640px;text-align:left;
-}
-.field label{display:block;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--pencil);margin-bottom:8px}
-.urlrow{display:flex;gap:10px;flex-wrap:wrap}
-.urlrow input{
-  flex:1;min-width:220px;font-family:'JetBrains Mono',monospace;font-size:1rem;
-  padding:13px 14px;border:1.5px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);
-}
-.urlrow input:focus{outline:none;border-color:var(--ink)}
-button.go{
-  background:var(--stamp);color:#fff;border:2px solid var(--stamp-dark);border-radius:7px;cursor:pointer;
-  font-family:'Public Sans',sans-serif;font-weight:700;font-size:.95rem;
-  padding:13px 26px;box-shadow:3px 3px 0 var(--stamp-dark);transition:transform .07s ease,box-shadow .07s ease;
-}
-button.go:hover{filter:brightness(.96)}
-button.go:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--stamp-dark)}
-button.go[disabled]{opacity:.55;cursor:wait;transform:none;box-shadow:none}
-.consent{display:flex;gap:9px;align-items:flex-start;margin-top:16px;font-size:.8rem;color:var(--pencil)}
-.consent input{margin-top:4px;accent-color:var(--stamp)}
-.msg{margin-top:14px;font-size:.88rem;display:none;padding:10px 14px;border-left:3px solid;border-radius:0 6px 6px 0}
-.msg.err{display:block;color:var(--stamp-dark);border-color:var(--stamp);background:rgba(180,54,42,.07)}
-.msg.info{display:block;color:var(--green);border-color:var(--green);background:rgba(46,83,57,.06)}
-
-#log{
-  display:none;margin-top:24px;background:#23221E;color:#EDEAE0;
-  font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.8;
-  padding:18px 20px;border-radius:10px;border:2px solid var(--ink);min-height:120px;
-}
-#log .t{color:#8B8574}
-#log .ok{color:#8FD3A8}
-#log .warn{color:#E3C56B}
-#log .crit{color:#E08A7F}
-#log .cursor{display:inline-block;width:8px;height:14px;background:#EDEAE0;vertical-align:-2px;animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
-
-#results{display:none;margin-top:32px}
-.verdict{
-  border:2px solid var(--ink);background:var(--card);border-radius:10px;
-  padding:26px 28px;box-shadow:var(--shadow);
-}
-.verdict-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;border-bottom:1.5px dashed var(--line);padding-bottom:14px;margin-bottom:6px}
-.verdict h2{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600}
-.score{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:1.05rem}
-.score.bad{color:var(--stamp)} .score.mid{color:#9a6b12} .score.good{color:var(--green)}
-.finding{padding:14px 0;border-bottom:1.5px dashed var(--line)}
-.finding:last-of-type{border-bottom:none}
-.f-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
-.sev1 .f-tag{color:var(--stamp)} .sev2 .f-tag{color:#9a6b12} .sev3 .f-tag{color:var(--pencil)}
-.f-title{font-weight:600;margin:2px 0}
-.f-detail{font-size:.85rem;color:var(--pencil)}
-.f-detail code{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--tag);padding:1px 5px;border-radius:4px}
-.cta-fix{margin-top:18px;background:var(--tag);padding:16px 18px;font-size:.92rem;border-radius:7px}
-.cta-fix a{color:var(--stamp);font-weight:700}
-.checkmark{color:var(--green)}
-</style>
 </head>
 <body>
 
@@ -80,152 +20,97 @@ button.go[disabled]{opacity:.55;cursor:wait;transform:none;box-shadow:none}
     <a href="/">Hunt log</a>
     <a href="/services.html">Services</a>
     <a href="/about.html">Method</a>
-    <a href="mailto:hello@patchhound.dev">Contact</a>
+    <a href="/checkup.html" class="here">Free checkup</a>
   </nav>
 </div></header>
 
 <div class="wrap">
 
-<section class="hero" style="padding-top:44px;display:block;text-align:center">
-  <div class="eyebrow" style="justify-content:center;display:flex">Free tool</div>
-  <h1 style="margin:0 auto">Run a checkup on your own site.</h1>
-  <p class="lede" style="margin-inline:auto">The same first pass we run before any tune-up: SSL health, exposed files, broken contact links, missing security headers. About a minute. No signup.</p>
+<section class="hero" style="padding-top:3rem">
+  <p class="kicker">Free checkup</p>
+  <h1>Your AI-built app has the same<br>wounds as every AI-built app.<br><em>Find out where yours are.</em></h1>
+  <p class="lede">Cursor, Lovable and Claude build fast, and they leak the same way
+  every time: API keys in client code, endpoints with no auth, SQL built from user input.
+  Paste your public repo below. You get back a plain verdict and one copy-paste
+  <strong>fix prompt per finding</strong>, ready for Cursor or Claude.</p>
 </section>
 
-<div class="scanbox">
-  <div class="field">
-    <label for="url">Your website address</label>
-    <div class="urlrow">
-      <input id="url" type="url" placeholder="yourdomain.com" autocomplete="url" inputmode="url">
-      <button class="go" id="go">Check it</button>
-    </div>
-  </div>
-  <label class="consent"><input type="checkbox" id="consent">
-    <span>I own or am authorized to test this site. We probe it with a handful of ordinary requests, nothing intrusive, and store nothing but the verdict shown below.</span></label>
-  <div class="msg err" id="err"></div>
-  <div class="msg info" id="info"></div>
-</div>
+<section class="panel" style="max-width:640px;margin:0 auto 2.5rem">
+  <form id="checkup-form">
+    <p style="margin:.2rem 0 .9rem">
+      <label for="repo" style="display:block;font-weight:600;margin-bottom:.3rem">GitHub repo (public)</label>
+      <input id="repo" name="repo" placeholder="yourname/your-app" required
+             style="width:100%;padding:.7rem .8rem;font-family:'JetBrains Mono',monospace;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
+    </p>
+    <p style="margin:.2rem 0 .9rem">
+      <label for="email" style="display:block;font-weight:600;margin-bottom:.3rem">Email for the report</label>
+      <input id="email" name="email" type="email" placeholder="you@yourapp.com" required
+             style="width:100%;padding:.7rem .8rem;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
+    </p>
+    <button id="go" type="submit"
+            style="background:#238636;color:#fff;border:none;border-radius:8px;padding:.75rem 1.4rem;font-weight:700;cursor:pointer;font-size:1rem">
+      Run my free checkup
+    </button>
+    <span id="msg" style="margin-left:.8rem"></span>
+  </form>
+  <p style="color:#8b949e;font-size:.85rem;margin-top:1rem">
+    Public repos only. Scan only code you have the right to scan. Secrets in the report
+    are always redacted. Limit 5 scans per day.
+  </p>
+</section>
 
-<pre id="log" aria-live="polite"></pre>
-
-<section id="results" aria-live="polite"></section>
-
-<div class="secline" style="margin-top:56px"><span class="tab">What it checks</span></div>
-<section class="block faq">
-  <dl>
-    <dt>Certificate health</dt>
-    <dd>Valid chain, correct hostname, days until expiry.</dd>
-    <dt>Exposed files</dt>
-    <dd>The classic leaks: backup archives, editor swaps, dotfiles that should never be reachable.</dd>
-    <dt>Contact and booking links</dt>
-    <dd>The links that cost you money when they silently die.</dd>
-    <dt>Security headers</dt>
-    <dd>The small settings most sites never set and attackers count on.</dd>
-  </dl>
-  <p style="margin-top:20px">This is the free first pass, not the full tune-up. The paid version reproduces every finding on your live server, patches it, and proves the fix. <a href="/services.html">Compare the engagements</a>.</p>
+<section style="max-width:640px;margin:0 auto 3rem">
+  <h2>What you get back</h2>
+  <ol>
+    <li><strong>A plain verdict.</strong> "We found 2 live secrets and an open admin endpoint." No severity matrices.</li>
+    <li><strong>Fix prompts.</strong> One per finding, written to paste straight into your editor: what's wrong, exactly what to change, how to verify it worked.</li>
+    <li><strong>Redacted evidence.</strong> Receipts that the finding is real, with secrets masked.</li>
+  </ol>
+  <h2>Why free</h2>
+  <p>Because if we find something scary enough, some people want us to keep watching the repo
+  weekly (<strong>$49/mo</strong>) or do a full human-reviewed audit with a walkthrough call
+  (<strong>$299</strong>). The free scan is how you decide if we're worth it.</p>
 </section>
 
 </div>
 
 <footer class="site"><div class="wrap">
-  <div class="cols">
-    <div>
-      <div class="fbrand">Patchhound.</div>
-      <div class="ftag">We hunt · we patch · you sleep</div>
-    </div>
-    <div class="fcol">
-      <strong>Site</strong>
-      <a href="/">Hunt log</a>
-      <a href="/blog/">All case files</a>
-      <a href="/services.html">Services</a>
-      <a href="/about.html">Method</a>
-    </div>
-    <div class="fcol">
-      <strong>Evidence</strong>
-      <a href="https://github.com/iamwhitehat">GitHub</a>
-      <a href="/feed.xml">RSS</a>
-    </div>
-    <div class="fcol">
-      <strong>Contact</strong>
-      <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>
-    </div>
-  </div>
-  <div class="legal"><span>Patchhound — evidence-based security studio</span><span>© 2026 · NL</span></div>
+  <p>Patchhound · evidence-based security · <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a></p>
 </div></footer>
 
 <script>
-/* API_BASE is injected by app.py at serve time; falls back to same-origin */
-window.API_BASE = window.API_BASE || '';
-const $ = id => document.getElementById(id);
-const log = $('log');
-
-function logLine(html){
-  log.style.display = 'block';
-  log.innerHTML += html + '\n';
-  log.scrollTop = log.scrollHeight;
-}
-
-function esc(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-$('go').addEventListener('click', async () => {
-  const btn = $('go');
-  let url = $('url').value.trim();
-  const err = $('err'), info = $('info');
-  err.className = 'msg err'; info.className = 'msg info';
-  err.textContent = ''; info.textContent = '';
-
-  if(!url){ err.textContent = 'Give me an address to check first.'; err.className = 'msg err show'; return; }
-  url = url.replace(/^https?:\/\//,'').replace(/\/.*$/,'');
-  if(!$('consent').checked){ err.textContent = 'Tick the authorization box so this stays above board.'; return; }
-
-  btn.disabled = true;
-  log.innerHTML = ''; log.style.display = 'block';
-  $('results').style.display = 'none';
-
-  logLine('<span class="t">$</span> patchhound checkup ' + esc(url));
-  logLine('<span class="t">·</span> resolving...');
-
-  try{
-    const res = await fetch(window.API_BASE + '/api/checkup', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({url})
+const API = "https://bronze-physiology-heating-panels.trycloudflare.com";
+const form = document.getElementById('checkup-form');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById('msg');
+  const btn = document.getElementById('go');
+  btn.disabled = true; btn.textContent = 'Queued...';
+  msg.textContent = '';
+  try {
+    const r = await fetch(API + '/api/checkup', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        repo: document.getElementById('repo').value.trim(),
+        email: document.getElementById('email').value.trim()
+      })
     });
-    if(!res.ok) throw new Error('server said ' + res.status);
-    const data = await res.json();
-
-    (data.steps || []).forEach(s => {
-      logLine('<span class="t">['+esc(s.tag)+']</span> <span class="'+esc(s.kind||'t')+'">'+esc(s.text)+'</span>');
-    });
-
-    renderResults(data, url);
-  }catch(e){
-    logLine('<span class="crit">✗</span> checkup failed: ' + esc(e.message));
-    logLine('<span class="t">·</span> email hello@patchhound.dev and we will run it by hand.');
-  }finally{
-    log.innerHTML = log.innerHTML.replace(/<span class="cursor"><\/span>/g,'');
-    btn.disabled = false;
+    const d = await r.json();
+    if (r.ok) {
+      msg.style.color = '#3fb950';
+      msg.textContent = 'Queued! Scans take a few minutes; your report link is on its way to your inbox.';
+      form.reset();
+    } else {
+      msg.style.color = '#f85149';
+      msg.textContent = d.error || 'Something went wrong.';
+    }
+  } catch (err) {
+    msg.style.color = '#f85149';
+    msg.textContent = 'Could not reach the scanner. Try again shortly.';
   }
+  btn.disabled = false; btn.textContent = 'Run my free checkup';
 });
-
-function renderResults(data, url){
-  const r = $('results');
-  const scoreCls = data.score >= 80 ? 'good' : data.score >= 50 ? 'mid' : 'bad';
-  const label = data.score >= 80 ? 'Sound' : data.score >= 50 ? 'Needs attention' : 'Action needed';
-  let html = '<div class="verdict">';
-  html += '<div class="verdict-head"><h2>Verdict for '+esc(url)+'</h2><span class="score '+scoreCls+'">'+data.score+'/100 · '+label+'</span></div>';
-  (data.findings || []).forEach(f => {
-    html += '<div class="finding sev'+f.severity+'">'
-         +  '<span class="f-tag">'+esc(f.tag)+'</span>'
-         +  '<div class="f-title">'+(f.ok ? '<span class="checkmark">✓</span> ' : '')+esc(f.title)+'</div>'
-         +  '<div class="f-detail">'+esc(f.detail)+'</div>'
-         +  '</div>';
-  });
-  html += '<div class="cta-fix">Want these fixed rather than just listed? The <a href="/services.html">€490 tune-up</a> reproduces each finding, patches it, and shows you the proof within 72 hours.</div>';
-  html += '</div>';
-  r.innerHTML = html;
-  r.style.display = 'block';
-  r.scrollIntoView({behavior:'smooth', block:'nearest'});
-}
 </script>
 
 </body>

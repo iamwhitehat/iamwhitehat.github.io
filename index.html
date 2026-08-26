@@ -7,161 +7,244 @@
 <meta name="description" content="Built your app with Cursor or Lovable? Paste your repo or site URL. See what's exposed, free. Unlock every hole with a fix prompt for €13.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#0C0E12;--panel:#14171E;--panel2:#181C25;--line:#262B36;
---ink:#E8EBF0;--mut:#939CAE;--blood:#FF4D3D;--stamp:#37D67A;
---serif:'Instrument Serif',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;
---mono:'JetBrains Mono',ui-monospace,monospace}
+/* ==== Raycast-derived system: near-black blue, red punctuation, macOS depth ==== */
+:root{
+  --bg:#07080a; --surface:#101111; --surface2:#1b1c1e;
+  --border:rgba(255,255,255,.06); --border2:rgba(255,255,255,.1);
+  --text:#f9f9f9; --text2:#cecece; --mut:#9c9c9d; --dim:#6a6b6c;
+  --red:#FF4D3D; --red-glow:rgba(255,77,61,.14);
+  --green:#5fc992; --blue:#55b3ff;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}
-*,*::before,*::after{animation:none!important;transition:none!important}}
-body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans)}
-a{color:inherit}
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-:focus-visible{outline:2px solid var(--blood);outline-offset:3px;border-radius:4px}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1!important;transform:none!important}
+}
+body{background:var(--bg);color:var(--text);font:500 16px/1.6 var(--sans);
+  letter-spacing:.2px;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+::selection{background:rgba(255,77,61,.3)}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:6px}
 
-header{position:sticky;top:0;z-index:50;background:rgba(12,14,18,.88);
-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700}
-.brand .mark{width:28px;height:28px;border:1.5px solid var(--blood);border-radius:7px;
-display:grid;place-items:center;color:var(--blood);font-family:var(--mono);font-size:15px;font-weight:700}
-.brand small{color:var(--mut);font-weight:400;display:block;font-size:11px;margin-top:-2px}
-nav.links{display:flex;gap:26px;align-items:center;font-size:14px}
-nav.links a{text-decoration:none;color:var(--mut);transition:color .15s}
-nav.links a:hover{color:var(--ink)}
-nav.links a.cta{color:#fff;background:var(--blood);padding:8px 16px;border-radius:8px;font-weight:600}
-@media(max-width:900px){nav.links a:not(.cta){display:none}}
+/* scroll reveal */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
 
-/* hero + form as one unit */
-.hero{padding:56px 0 40px}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:48px;align-items:start}
-@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
-.kick{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-color:var(--mut);display:inline-flex;align-items:center;gap:10px}
-.kick::before{content:"";width:22px;height:2px;background:var(--blood)}
-.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(38px,4.6vw,60px);
-line-height:1.04;margin:20px 0 18px}
-.hero h1 em{font-style:italic;color:var(--blood)}
-.hero p.sub{color:var(--mut);margin-bottom:26px;font-size:17px}
-.proof{display:flex;gap:26px;flex-wrap:wrap;margin-top:30px}
-.proof div b{font-family:var(--serif);font-size:30px;font-weight:400;display:block;line-height:1.1}
-.proof div span{font-family:var(--mono);font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut)}
+/* ============ NAV ============ */
+header{position:sticky;top:0;z-index:50;background:rgba(7,8,10,.8);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:.2px}
+.logo svg{display:block}
+.logo small{display:block;font:400 10px var(--mono);letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--dim);margin-top:1px}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{color:var(--mut);font-size:14px;font-weight:500;padding:8px 14px;border-radius:8px;
+  transition:color .15s,background .15s}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.nav-links a.cta{background:var(--red);color:#fff;font-weight:600;margin-left:6px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 4px 14px -4px var(--red-glow)}
+.nav-links a.cta:hover{opacity:.85;background:var(--red)}
+.burger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.burger span{display:block;width:20px;height:2px;background:var(--text2);margin:4px 0;
+  border-radius:2px;transition:transform .2s,opacity .2s}
+.burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;inset:60px 0 auto 0;z-index:49;background:rgba(7,8,10,.97);
+  border-bottom:1px solid var(--border);padding:12px 20px 20px}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:14px 12px;color:var(--text2);font-weight:500;
+  border-bottom:1px solid var(--border)}
+.mobile-menu a:last-child{border-bottom:none;color:var(--red);font-weight:600}
+@media(max-width:820px){
+  .nav-links{display:none}
+  .burger{display:block}
+}
 
-.formcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px}
-.formcard .tabs{display:flex;gap:8px;margin-bottom:22px}
-.formcard .tabs button{flex:1;background:transparent;border:1px solid var(--line);color:var(--mut);
-padding:11px;border-radius:9px;font:600 14px var(--sans);cursor:pointer;transition:all .15s}
-.formcard .tabs button.on{background:var(--panel2);border-color:rgba(255,77,61,.5);color:var(--ink)}
-.f label{display:block;font:600 13.5px var(--sans);margin:0 0 7px}
-.f input{width:100%;padding:13px 15px;font:14px var(--mono);
-background:#090B0F;color:var(--ink);border:1px solid var(--line);border-radius:9px;margin-bottom:16px}
-.f input:focus{outline:none;border-color:rgba(255,77,61,.6)}
-.f input::placeholder{color:#4c5666}
-.consent{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--mut);margin-bottom:18px}
-.consent input{accent-color:var(--blood);margin-top:3px;width:auto}
-.submit{width:100%;background:var(--blood);color:#fff;border:none;padding:15px;border-radius:10px;
-font:700 15px var(--sans);cursor:pointer;transition:filter .15s}
-.submit:hover{filter:brightness(1.08)}
-.submit[disabled]{opacity:.6;cursor:wait}
-.msg{min-height:22px;font-size:13.5px;margin-top:12px;font-family:var(--mono)}
-.msg.ok{color:var(--stamp)}.msg.err{color:var(--blood)}
-.risk-reversal{border-top:1px solid var(--line);margin-top:22px;padding-top:16px;
-font-size:12.5px;color:var(--mut);line-height:1.7}
-.privacy-note{text-align:center;color:var(--mut);font-size:12px;margin-top:16px}
+/* ============ HERO ============ */
+.hero{padding:72px 0 48px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+  width:700px;height:400px;background:radial-gradient(ellipse,var(--red-glow),transparent 65%);
+  pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:56px;align-items:start;position:relative}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+.kick{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--mono);
+  letter-spacing:1.2px;text-transform:uppercase;color:var(--mut);
+  border:1px solid var(--border2);border-radius:999px;padding:6px 14px;
+  background:rgba(255,255,255,.03)}
+.kick .dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px rgba(95,201,146,.6);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.5}}
+h1{font-size:clamp(36px,5.4vw,58px);font-weight:600;line-height:1.08;letter-spacing:-.5px;
+  margin:22px 0 18px;color:var(--text)}
+h1 em{font-style:normal;color:var(--red)}
+.sub{color:var(--text2);font-size:17px;line-height:1.65;max-width:520px}
+.proof{display:flex;gap:36px;flex-wrap:wrap;margin-top:34px}
+.proof div b{font-size:26px;font-weight:600;display:block;line-height:1.1;color:var(--text)}
+.proof div span{font:500 11px var(--mono);letter-spacing:1.4px;text-transform:uppercase;color:var(--dim)}
 
-.strip{margin:52px auto 0;max-width:1080px;border:1px solid var(--line);border-radius:12px;
-background:var(--panel);overflow:hidden;text-align:left}
-.strip .bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);
-font-family:var(--mono);font-size:12px;color:var(--mut)}
-.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
-.dot.r{background:#3d2226}.dot.y{background:#3b3524}.dot.g{background:#22392c}
-.strip .bar span{margin-left:auto}
-.strip .feed{font-family:var(--mono);font-size:13.5px;line-height:2;padding:18px 20px;min-height:132px;white-space:pre-wrap}
-.feed .ln{display:block;opacity:0;transform:translateY(4px);animation:reveal .35s forwards}
-.feed .ln b{color:var(--blood);font-weight:500}
-.feed .ln.ok b{color:var(--stamp)}
-.feed .redact{background:var(--blood);color:var(--blood);border-radius:2px;padding:0 6px}
+/* ============ FORM CARD (macOS depth) ============ */
+.formcard{background:var(--surface);border-radius:16px;padding:26px;
+  box-shadow:rgb(27,28,30) 0 0 0 1px, rgba(0,0,0,.5) 0 20px 40px -20px, inset 0 1px 0 rgba(255,255,255,.05)}
+.tabs{display:flex;gap:6px;background:rgba(255,255,255,.03);border-radius:10px;padding:4px;margin-bottom:22px}
+.tabs button{flex:1;background:transparent;border:none;color:var(--mut);
+  padding:10px;border-radius:7px;font:600 13.5px var(--sans);cursor:pointer;transition:all .15s}
+.tabs button.on{background:rgba(255,255,255,.08);color:var(--text);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.f{min-height:284px} /* fixed: typing never shifts layout */
+.f label{display:block;font:500 13px var(--sans);color:var(--mut);margin:0 0 7px}
+.f input{width:100%;padding:13px 14px;font:400 14px var(--mono);letter-spacing:.2px;
+  background:#07080a;color:var(--text);border:1px solid var(--border2);border-radius:9px;
+  margin-bottom:16px;transition:border-color .15s,box-shadow .15s}
+.f input:focus{outline:none;border-color:rgba(85,179,255,.5);
+  box-shadow:0 0 0 3px rgba(85,179,255,.12)}
+.f input::placeholder{color:var(--dim)}
+.consent{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--mut);margin-bottom:16px}
+.consent input{accent-color:var(--red);margin-top:3px;width:auto}
+.submit{width:100%;background:var(--red);color:#fff;border:none;padding:14px;border-radius:10px;
+  font:600 15px var(--sans);letter-spacing:.2px;cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 6px 20px -6px var(--red-glow);
+  transition:opacity .15s,transform .15s}
+.submit:hover{opacity:.88}
+.submit:active{transform:scale(.985)}
+.submit[disabled]{opacity:.55;cursor:wait}
+.msg{min-height:44px;font-size:13px;margin-top:12px;font-family:var(--mono);letter-spacing:.2px}
+.msg.ok{color:var(--green)}.msg.err{color:var(--red)}
+.risk{border-top:1px solid var(--border);margin-top:18px;padding-top:16px;
+  font-size:12.5px;color:var(--dim);line-height:1.7}
+.risk strong{color:var(--text2);font-weight:600}
+
+/* ============ SCAN FEED ============ */
+.strip{margin:56px 0 0;border-radius:14px;background:#0a0b0d;overflow:hidden;
+  box-shadow:rgb(27,28,30) 0 0 0 1px, inset 0 1px 0 rgba(255,255,255,.04)}
+.strip .bar{display:flex;align-items:center;gap:7px;padding:12px 16px;border-bottom:1px solid var(--border)}
+.dot{width:10px;height:10px;border-radius:50%;background:#232527}
+.dot.r{background:#3a2422}.dot.y{background:#3a3522}.dot.g{background:#223528}
+.strip .bar span{margin-left:auto;font:400 11px var(--mono);color:var(--dim);letter-spacing:.4px}
+.strip .feed{font:400 13px var(--mono);line-height:2.1;padding:18px 20px;min-height:150px;white-space:pre-wrap;color:var(--text2)}
+.feed .ln{display:block;opacity:0;transform:translateY(4px);animation:reveal .4s forwards}
+.feed .ln b{color:var(--red);font-weight:500}
+.feed .ln.ok b{color:var(--green)}
+.feed .redact{background:var(--red);color:var(--red);border-radius:3px;padding:0 6px}
 @keyframes reveal{to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.feed .ln{opacity:1;transform:none}}
 
-section{padding:64px 0}
-.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-color:var(--mut);display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.eyebrow::before{content:"";width:4px;height:16px;background:var(--blood);border-radius:1px}
-h2{font-family:var(--serif);font-weight:400;font-size:clamp(29px,3.8vw,42px);line-height:1.1;margin-bottom:14px}
-.lede{color:var(--mut);max-width:680px;margin-bottom:36px;font-size:17px}
+/* ============ SECTIONS ============ */
+section{padding:88px 0}
+@media(max-width:640px){section{padding:56px 0}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--mono);
+  letter-spacing:1.2px;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+.eyebrow::before{content:"";width:18px;height:2px;background:var(--red);border-radius:2px}
+h2{font-size:clamp(28px,3.6vw,40px);font-weight:600;line-height:1.12;letter-spacing:-.4px;margin-bottom:14px}
+.lede{color:var(--mut);max-width:640px;margin-bottom:40px;font-size:16.5px;line-height:1.7}
 
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:860px){.duo{grid-template-columns:1fr}}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px}
-.card h3{font-family:var(--serif);font-weight:400;font-size:24px;margin-bottom:6px}
-.card p.tag{font-family:var(--mono);font-size:12px;color:var(--mut);margin-bottom:16px}
-.term{background:#090B0F;border:1px solid var(--line);border-radius:8px;padding:16px;
-font-family:var(--mono);font-size:12.5px;line-height:1.95;color:var(--mut)}
-.term b{color:var(--ink);font-weight:500}
-.term .bad{color:var(--blood)}
-.term .good{color:var(--stamp)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px;
+  transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(255,77,61,.35);transform:translateY(-2px)}
+.card h3{font-size:19px;font-weight:600;margin-bottom:6px;letter-spacing:-.2px}
+.card p.tag{font:500 11.5px var(--mono);color:var(--dim);letter-spacing:.8px;text-transform:uppercase;margin-bottom:18px}
+.term{background:#0a0b0d;border:1px solid var(--border);border-radius:10px;padding:16px;
+  font:400 12.5px var(--mono);line-height:2;color:var(--mut);letter-spacing:.2px}
+.term b{color:var(--text);font-weight:500}
+.term .bad{color:var(--red)}
+.term .good{color:var(--green)}
 
-.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+/* ============ TIERS ============ */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
 @media(max-width:860px){.tiers{grid-template-columns:1fr}}
-.tier{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px;display:flex;flex-direction:column}
-.tier.hot{border-color:rgba(255,77,61,.55);position:relative}
-.tier.hot::after{content:"START HERE";position:absolute;top:-11px;left:24px;background:var(--blood);color:#fff;
-font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:4px 10px;border-radius:3px}
-.tier .price{font-family:var(--serif);font-size:44px;line-height:1;margin:14px 0 2px}
-.tier .price sup{font-size:16px;color:var(--mut);font-family:var(--mono)}
-.tier .per{font-family:var(--mono);font-size:12px;color:var(--mut)}
-.tier ul{list-style:none;margin:22px 0;display:grid;gap:10px;font-size:14.5px;color:var(--mut)}
-.tier li::before{content:"·";color:var(--blood);margin-right:8px;font-weight:700}
-.tier .btn-link{margin-top:auto;text-align:center;text-decoration:none;background:transparent;
-border:1px solid var(--line-hard);color:var(--ink);font-weight:600;font-size:15px;padding:13px 20px;border-radius:10px}
-.tier .btn-link:hover{border-color:var(--mut)}
+.tier{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;
+  display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.tier:hover{transform:translateY(-3px)}
+.tier.hot{border-color:rgba(255,77,61,.45);position:relative;
+  box-shadow:0 0 0 1px rgba(255,77,61,.15), 0 12px 40px -12px var(--red-glow)}
+.tier.hot::after{content:"START HERE";position:absolute;top:-10px;left:24px;background:var(--red);color:#fff;
+  font:600 10px var(--mono);letter-spacing:1.4px;padding:4px 10px;border-radius:5px}
+.tier .tname{font:500 11px var(--mono);letter-spacing:1.6px;text-transform:uppercase;color:var(--dim)}
+.tier .price{font-size:40px;font-weight:600;line-height:1;margin:14px 0 4px;letter-spacing:-.5px}
+.tier .price sup{font-size:15px;color:var(--mut);font-weight:500}
+.tier .per{font:400 12.5px var(--mono);color:var(--mut)}
+.tier ul{list-style:none;margin:24px 0;display:grid;gap:11px;font-size:14px;color:var(--mut)}
+.tier li{padding-left:20px;position:relative}
+.tier li::before{content:"";position:absolute;left:0;top:9px;width:10px;height:2px;background:var(--red);border-radius:1px}
+.tier .btn-link{margin-top:auto;text-align:center;text-decoration:none;color:var(--text);
+  border:1px solid var(--border2);font-weight:600;font-size:14.5px;padding:13px 20px;border-radius:10px;
+  transition:border-color .15s,background .15s}
+.tier .btn-link:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.03)}
 
+/* ============ OBJECTIONS ============ */
 .objections{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:760px){.objections{grid-template-columns:1fr}}
-.obj{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
-.obj b{display:block;font-family:var(--serif);font-weight:400;font-size:19px;margin-bottom:7px;color:var(--ink)}
-.obj p{color:var(--mut);font-size:14.5px}
+.obj{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;
+  transition:border-color .2s}
+.obj:hover{border-color:rgba(255,255,255,.14)}
+.obj b{display:block;font-weight:600;font-size:15.5px;margin-bottom:8px;color:var(--text);letter-spacing:-.1px}
+.obj p{color:var(--mut);font-size:14px;line-height:1.7}
 
-footer{border-top:1px solid var(--line);padding:36px 0;color:var(--mut);font-size:13.5px}
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--border);padding:36px 0;color:var(--dim);font-size:13px}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 footer a{color:var(--mut)}
+footer a:hover{color:var(--text)}
 </style>
 </head>
 <body>
 
-<header><div class="wrap nav">
-  <a class="brand" href="/">
-    <span class="mark">P</span>
-    <span>Patchhound<small>we hunt · we patch · you sleep</small></span>
-  </a>
-  <nav class="links">
-    <a href="/hunt-log.html">Case files</a>
-    <a href="/services.html">For funded teams</a>
-    <a href="/about.html">Method</a>
-    <a class="cta" href="#scan">Free scan</a>
-  </nav>
-</div></header>
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="/" aria-label="Patchhound home">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="28" height="28" rx="8" stroke="#FF4D3D" stroke-width="1.6"/>
+        <path d="M9 20V10h6.2c2.3 0 3.8 1.4 3.8 3.4S17.5 16.9 15.2 16.9H12V20H9z" fill="#FF4D3D"/>
+        <circle cx="19.5" cy="19.5" r="2.4" fill="#FF4D3D"/>
+      </svg>
+      <span>Patchhound<small>we hunt · we patch · you sleep</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="/hunt-log.html">Case files</a>
+      <a href="/services.html">For funded teams</a>
+      <a href="/about.html">Method</a>
+      <a class="cta" href="#scan">Free scan</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<div class="mobile-menu" id="mmenu">
+  <a href="/hunt-log.html">Case files</a>
+  <a href="/services.html">For funded teams</a>
+  <a href="/about.html">Method</a>
+  <a href="#scan">Free scan →</a>
+</div>
 
 <div class="hero wrap">
   <div class="hero-grid">
     <div>
-      <p class="kick">Free security scan · no card, no account</p>
-      <h1>You built your app in a weekend.<br>How long to <em>break in?</em></h1>
-      <p class="sub">Apps built with Cursor, Lovable or Claude forget the same things:
+      <span class="kick rv in"><span class="dot"></span>Free security scan · no card, no account</span>
+      <h1 class="rv in">You built your app in a weekend.<br>How long to <em>break in?</em></h1>
+      <p class="sub rv in d1">Apps built with Cursor, Lovable or Claude forget the same things:
       passwords left in the open, doors with no lock. Would you bet your users
       that yours got lucky? Paste it and know in minutes.</p>
-      <div class="proof">
-        <div><b id="stat-scans">N</b><span>apps scanned</span></div>
+      <div class="proof rv in d2">
+        <div><b id="stat-scans">7</b><span>apps scanned</span></div>
         <div><b>4+3</b><span>scan engines</span></div>
-        <div><b>&lt;5 min</b><span>to your verdict</span></div>
+        <div><b>&lt;5 min</b><span>to verdict</span></div>
       </div>
     </div>
 
-    <div class="formcard" id="scan">
+    <div class="formcard rv in d1" id="scan">
       <div class="tabs">
         <button id="tab-repo" class="on" type="button">GitHub repo</button>
         <button id="tab-site" type="button">Live site</button>
@@ -187,15 +270,15 @@ footer a{color:var(--mut)}
         <div class="msg" id="msg-s"></div>
       </form>
 
-      <div class="risk-reversal">
-        <strong style="color:var(--ink)">The first finding is free.</strong> If the scan
-        finds nothing dangerous, you pay nothing, ever. The clean report is the product.
-        Secrets stay hidden. Your app's name is never published.
+      <div class="risk">
+        <strong>The first finding is free.</strong> If the scan finds nothing dangerous,
+        you pay nothing, ever. The clean report is the product. Secrets stay hidden.
+        Your app's name is never published.
       </div>
     </div>
   </div>
 
-  <div class="strip" aria-hidden="true">
+  <div class="strip rv in d2" aria-hidden="true">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
       patchhound · live scan feed<span>demo output, secrets hidden</span></div>
     <div class="feed" id="feed"></div>
@@ -203,12 +286,12 @@ footer a{color:var(--mut)}
 </div>
 
 <section><div class="wrap">
-  <p class="eyebrow">What the scan looks for</p>
-  <h2>What if the AI forgot to lock the door?</h2>
-  <p class="lede">It happens on almost every app we scan. Not because the tool is bad.
+  <p class="eyebrow rv">What the scan looks for</p>
+  <h2 class="rv">What if the AI forgot to lock the door?</h2>
+  <p class="lede rv d1">It happens on almost every app we scan. Not because the tool is bad.
   Because nobody taught it to think like a burglar. We do. Every scan asks what a hacker would ask:</p>
   <div class="duo">
-    <div class="card">
+    <div class="card rv d1">
       <h3>In your code</h3>
       <p class="tag">paste a GitHub repo</p>
       <div class="term">
@@ -218,7 +301,7 @@ footer a{color:var(--mut)}
         <span class="good">each one: a fix you can paste in</span>
       </div>
     </div>
-    <div class="card">
+    <div class="card rv d2">
       <h3>On your live site</h3>
       <p class="tag">paste your URL</p>
       <div class="term">
@@ -232,25 +315,25 @@ footer a{color:var(--mut)}
 </div></section>
 
 <section><div class="wrap">
-  <p class="eyebrow">After the scan</p>
-  <h2>You'll ship code tomorrow. Who's watching then?</h2>
-  <p class="lede">Today's scan ends today. Next week's vibe-coding session can open
+  <p class="eyebrow rv">After the scan</p>
+  <h2 class="rv">You'll ship code tomorrow. Who's watching then?</h2>
+  <p class="lede rv d1">Today's scan ends today. Next week's vibe-coding session can open
   a brand-new hole, and it won't email you about it. We will.</p>
   <div class="tiers">
-    <div class="tier">
-      <span class="per">THE SCAN</span>
+    <div class="tier rv d1">
+      <span class="tname">The scan</span>
       <div class="price">Free</div><span class="per">one look, on the house</span>
       <ul><li>Full scan of repo or site</li><li>Your verdict + worst finding, free</li><li>Clean scan? The clean bill is yours free too</li></ul>
       <a class="btn-link" href="#scan">Start below</a>
     </div>
-    <div class="tier hot">
-      <span class="per">FULL REPORT</span>
+    <div class="tier hot rv d2">
+      <span class="tname">Full report</span>
       <div class="price">€13</div><span class="per">once · yours forever</span>
       <ul><li>Every finding, exact file and line</li><li>A paste-ready fix for each one</li><li>Sleep tonight. Actually.</li></ul>
       <a class="btn-link" href="#scan">Scan first, then unlock</a>
     </div>
-    <div class="tier">
-      <span class="per">DAILY WATCH</span>
+    <div class="tier rv d3">
+      <span class="tname">Daily watch</span>
       <div class="price">€49<sup>/mo</sup></div><span class="per">per app · cancel anytime</span>
       <ul><li>Full report included day one</li><li>Re-scanned every 24 hours</li><li>New hole? You know within a day, not when it's too late</li></ul>
       <a class="btn-link" href="#scan">Scan first, then decide</a>
@@ -259,21 +342,21 @@ footer a{color:var(--mut)}
 </div></section>
 
 <section><div class="wrap">
-  <p class="eyebrow">Fair questions</p>
-  <h2>Asked by everyone. Answered straight.</h2>
-  <p class="lede"></p>
+  <p class="eyebrow rv">Fair questions</p>
+  <h2 class="rv">Asked by everyone. Answered straight.</h2>
+  <p class="lede rv d1"></p>
   <div class="objections">
-    <div class="obj"><b>Is scanning other people's repos even legal?</b>
+    <div class="obj rv d1"><b>Is scanning other people's repos even legal?</b>
       <p>We only accept public repos and public URLs, and the form requires you to confirm
       you own the target. Scanning public code for defensive purposes is standard practice;
       exploiting anything would not be, and we never do.</p></div>
-    <div class="obj"><b>Will you tell anyone what you found in my app?</b>
+    <div class="obj rv d2"><b>Will you tell anyone what you found in my app?</b>
       <p>No. Reports are unlisted pages only you and we can link to. We never publish
       client findings without written permission. Your repo name appears nowhere public.</p></div>
-    <div class="obj"><b>What if it finds nothing?</b>
+    <div class="obj rv d1"><b>What if it finds nothing?</b>
       <p>Then you get a clean bill worth having: proof that today's version of your app
       passes every check. That's the free product working exactly as intended.</p></div>
-    <div class="obj"><b>Why should I trust prompts written about my code?</b>
+    <div class="obj rv d2"><b>Why should I trust prompts written about my code?</b>
       <p>Because every finding ships with redacted evidence from your actual files, and
       every prompt tells you how to verify the fix yourself. You are always the last gate.</p></div>
   </div>
@@ -285,6 +368,24 @@ footer a{color:var(--mut)}
 </div></footer>
 
 <script>
+/* scroll reveal */
+const io = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold:.12});
+document.querySelectorAll('.rv:not(.in)').forEach(el => io.observe(el));
+
+/* mobile menu */
+const burger = document.getElementById('burger'), mmenu = document.getElementById('mmenu');
+burger.onclick = () => {
+  const open = mmenu.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', open);
+};
+mmenu.querySelectorAll('a').forEach(a => a.onclick = () => {
+  mmenu.classList.remove('open'); burger.classList.remove('open');
+});
+
+/* scan feed loop */
 const LINES = [
   '<span class="ln">&gt; scanning <b>your-app</b> @ main …</span>',
   '<span class="ln">live password <span class="redact">Adm••••</span>••• in <b>src/config.js:14</b></span>',
@@ -308,11 +409,13 @@ function play(){
 reduced ? LINES.forEach(l => { const d=document.createElement('div'); d.innerHTML=l; while(d.firstChild) feed.appendChild(d.firstChild); })
         : play();
 
+/* live counter */
 fetch('/stats.json').then(r=>r.json()).then(d=>{
   const el=document.getElementById('stat-scans');
   if(el && d.scans) el.textContent = d.scans;
 }).catch(()=>{});
 
+/* tabs */
 const tabR=document.getElementById('tab-repo'), tabS=document.getElementById('tab-site');
 const fR=document.getElementById('form-repo'), fS=document.getElementById('form-site');
 function show(repo){ fR.hidden=!repo; fS.hidden=repo;
@@ -347,7 +450,7 @@ fS.addEventListener('submit', async e => {
                            consent:true})});
     const d=await r.json();
     if(r.ok){msg.classList.add('ok');
-      msg.innerHTML='Done. Report: <a style="color:var(--stamp)" href="'+d.url+'">open it here</a>. A copy is also headed to your inbox.';
+      msg.innerHTML='Done. Report: <a style="color:var(--green)" href="'+d.url+'">open it here</a>. A copy is also headed to your inbox.';
       fS.reset();}
     else{msg.classList.add('err');msg.textContent=d.error||'Something went wrong.';}
   }catch(_){msg.classList.add('err');msg.textContent='Could not reach the scanner. Try again shortly.';}

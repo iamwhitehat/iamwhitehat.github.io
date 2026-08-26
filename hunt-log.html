@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hunt log · Patchhound</title>
-<meta name="description" content="Every bug we find, fix, and verify: the diff, the test numbers, and what we got wrong. New case file most weeks.">
+<title>Case files · Patchhound</title>
+<meta name="description" content="Every bug we find, fix, and verify: the diff, the test numbers, and what we got wrong. Public proof of how we work.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
@@ -19,23 +19,25 @@
   </a>
   <nav class="main">
     <a href="/">Free scan</a>
-    <a href="/hunt-log.html">Case files</a>
-    <a href="/services.html">Services</a>
+    <a href="/hunt-log.html" class="here">Case files</a>
+    <a href="/services.html">For funded teams</a>
     <a href="/about.html">Method</a>
-    <a href="mailto:hello@patchhound.dev">Contact</a>
+    <a class="cta" href="/#scan">Free scan</a>
   </nav>
 </div></header>
 
 <div class="wrap">
-  <div class="crumb"><a href="/">Home</a> / hunt log</div>
 
-<section class="hero" style="padding-top:28px;display:block">
-  <h1 style="max-width:none">Hunt log</h1>
-  <p class="lede">Case files from the field. Each one is a real bug with a real fix: how we found it, the diff, whether the tests actually discriminate, and what tripped us up along the way.</p>
+<section class="hero" style="padding-top:44px;display:block">
+  <h1>Proof, published.</h1>
+  <p class="lede">Every bug we find in open source becomes a public case file:
+  the diff, the test numbers, what we got wrong. It's how you judge us before paying.
+  Client work stays confidential unless a client says otherwise.</p>
+  <p><a class="btn solid" href="/#scan">Run your own scan first, free</a></p>
 </section>
 
 <div class="secline"><span class="tab">Case files</span></div>
-<section class="block">
+<section class="block" id="log">
 
   <a class="case" href="/blog/002-idempotency-gaps.html">
     <span class="stamp green">PATCHED</span>
@@ -54,12 +56,11 @@
 
 </section>
 
-<section class="contact-band">
-  <div>
-    <h2>Want this run against your site?</h2>
-    <p>The tune-up applies the same evidence standard to your endpoints. Flat fee, 72 hours.</p>
-  </div>
-  <a class="btn solid" href="/services.html">See the engagements</a>
+<div class="secline"><span class="tab">Field notes</span></div>
+<section class="block">
+  <p>Maintaining an open source project? A free security pass from us costs you nothing but an email. We publish what we find only with your sign-off. <a href="mailto:hello@patchhound.dev?subject=Free%20security%20pass">hello@patchhound.dev</a>.</p>
+  <p style="margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pencil)">
+    RSS: <a href="/feed.xml">/feed.xml</a> · GitHub: <a href="https://github.com/iamwhitehat">iamwhitehat</a></p>
 </section>
 
 </div>
@@ -73,21 +74,22 @@
     <div class="fcol">
       <strong>Site</strong>
       <a href="/">Free scan</a>
-      <a href="/blog/">All case files</a>
-      <a href="/services.html">Services</a>
+      <a href="/hunt-log.html">All case files</a>
+      <a href="/services.html">For funded teams</a>
       <a href="/about.html">Method</a>
     </div>
     <div class="fcol">
       <strong>Evidence</strong>
       <a href="https://github.com/iamwhitehat">GitHub</a>
       <a href="/feed.xml">RSS</a>
+      <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/12001">Case file PR</a>
     </div>
     <div class="fcol">
       <strong>Contact</strong>
       <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>
     </div>
   </div>
-  <div class="legal"><span>Patchhound — evidence-based security studio</span><span>© 2026 · NL</span></div>
+  <div class="legal"><span>Patchhound · evidence-based security studio</span><span>© 2026 · NL</span></div>
 </div></footer>
 
 </body>

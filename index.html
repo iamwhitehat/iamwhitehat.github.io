@@ -3,159 +3,356 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Patchhound: security fixes with published proof</title>
-<meta name="description" content="A security studio that finds real vulnerabilities, fixes them, and publishes the evidence. Weekly hunt log. Flat-fee tune-ups for web-facing businesses.">
+<title>Is your AI-built app safe? Find out free | Patchhound</title>
+<meta name="description" content="Built your app with Cursor or Lovable? Paste your repo or site URL. See what's exposed, free. Unlock every hole with a fix prompt for €13.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
-<link rel="alternate" type="application/rss+xml" title="Patchhound hunt log" href="/feed.xml">
+<style>
+:root{--paper:#0C0E12;--panel:#14171E;--panel2:#181C25;--line:#262B36;
+--ink:#E8EBF0;--mut:#939CAE;--blood:#FF4D3D;--stamp:#37D67A;
+--serif:'Instrument Serif',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;
+--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}
+*,*::before,*::after{animation:none!important;transition:none!important}}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans)}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+:focus-visible{outline:2px solid var(--blood);outline-offset:3px;border-radius:4px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(12,14,18,.88);
+backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700}
+.brand .mark{width:28px;height:28px;border:1.5px solid var(--blood);border-radius:7px;
+display:grid;place-items:center;color:var(--blood);font-family:var(--mono);font-size:15px;font-weight:700}
+.brand small{color:var(--mut);font-weight:400;display:block;font-size:11px;margin-top:-2px}
+nav.links{display:flex;gap:26px;align-items:center;font-size:14px}
+nav.links a{text-decoration:none;color:var(--mut);transition:color .15s}
+nav.links a:hover{color:var(--ink)}
+nav.links a.cta{color:#fff;background:var(--blood);padding:8px 16px;border-radius:8px;font-weight:600}
+@media(max-width:900px){nav.links a:not(.cta){display:none}}
+
+/* hero + form as one unit */
+.hero{padding:56px 0 40px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:48px;align-items:start}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.kick{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--mut);display:inline-flex;align-items:center;gap:10px}
+.kick::before{content:"";width:22px;height:2px;background:var(--blood)}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(38px,4.6vw,60px);
+line-height:1.04;margin:20px 0 18px}
+.hero h1 em{font-style:italic;color:var(--blood)}
+.hero p.sub{color:var(--mut);margin-bottom:26px;font-size:17px}
+.proof{display:flex;gap:26px;flex-wrap:wrap;margin-top:30px}
+.proof div b{font-family:var(--serif);font-size:30px;font-weight:400;display:block;line-height:1.1}
+.proof div span{font-family:var(--mono);font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut)}
+
+.formcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px}
+.formcard .tabs{display:flex;gap:8px;margin-bottom:22px}
+.formcard .tabs button{flex:1;background:transparent;border:1px solid var(--line);color:var(--mut);
+padding:11px;border-radius:9px;font:600 14px var(--sans);cursor:pointer;transition:all .15s}
+.formcard .tabs button.on{background:var(--panel2);border-color:rgba(255,77,61,.5);color:var(--ink)}
+.f label{display:block;font:600 13.5px var(--sans);margin:0 0 7px}
+.f input{width:100%;padding:13px 15px;font:14px var(--mono);
+background:#090B0F;color:var(--ink);border:1px solid var(--line);border-radius:9px;margin-bottom:16px}
+.f input:focus{outline:none;border-color:rgba(255,77,61,.6)}
+.f input::placeholder{color:#4c5666}
+.consent{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--mut);margin-bottom:18px}
+.consent input{accent-color:var(--blood);margin-top:3px;width:auto}
+.submit{width:100%;background:var(--blood);color:#fff;border:none;padding:15px;border-radius:10px;
+font:700 15px var(--sans);cursor:pointer;transition:filter .15s}
+.submit:hover{filter:brightness(1.08)}
+.submit[disabled]{opacity:.6;cursor:wait}
+.msg{min-height:22px;font-size:13.5px;margin-top:12px;font-family:var(--mono)}
+.msg.ok{color:var(--stamp)}.msg.err{color:var(--blood)}
+.risk-reversal{border-top:1px solid var(--line);margin-top:22px;padding-top:16px;
+font-size:12.5px;color:var(--mut);line-height:1.7}
+.privacy-note{text-align:center;color:var(--mut);font-size:12px;margin-top:16px}
+
+.strip{margin:52px auto 0;max-width:1080px;border:1px solid var(--line);border-radius:12px;
+background:var(--panel);overflow:hidden;text-align:left}
+.strip .bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);
+font-family:var(--mono);font-size:12px;color:var(--mut)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dot.r{background:#3d2226}.dot.y{background:#3b3524}.dot.g{background:#22392c}
+.strip .bar span{margin-left:auto}
+.strip .feed{font-family:var(--mono);font-size:13.5px;line-height:2;padding:18px 20px;min-height:132px;white-space:pre-wrap}
+.feed .ln{display:block;opacity:0;transform:translateY(4px);animation:reveal .35s forwards}
+.feed .ln b{color:var(--blood);font-weight:500}
+.feed .ln.ok b{color:var(--stamp)}
+.feed .redact{background:var(--blood);color:var(--blood);border-radius:2px;padding:0 6px}
+@keyframes reveal{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.feed .ln{opacity:1;transform:none}}
+
+section{padding:64px 0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--mut);display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.eyebrow::before{content:"";width:4px;height:16px;background:var(--blood);border-radius:1px}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(29px,3.8vw,42px);line-height:1.1;margin-bottom:14px}
+.lede{color:var(--mut);max-width:680px;margin-bottom:36px;font-size:17px}
+
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:860px){.duo{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px}
+.card h3{font-family:var(--serif);font-weight:400;font-size:24px;margin-bottom:6px}
+.card p.tag{font-family:var(--mono);font-size:12px;color:var(--mut);margin-bottom:16px}
+.term{background:#090B0F;border:1px solid var(--line);border-radius:8px;padding:16px;
+font-family:var(--mono);font-size:12.5px;line-height:1.95;color:var(--mut)}
+.term b{color:var(--ink);font-weight:500}
+.term .bad{color:var(--blood)}
+.term .good{color:var(--stamp)}
+
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+@media(max-width:860px){.tiers{grid-template-columns:1fr}}
+.tier{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px;display:flex;flex-direction:column}
+.tier.hot{border-color:rgba(255,77,61,.55);position:relative}
+.tier.hot::after{content:"START HERE";position:absolute;top:-11px;left:24px;background:var(--blood);color:#fff;
+font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:4px 10px;border-radius:3px}
+.tier .price{font-family:var(--serif);font-size:44px;line-height:1;margin:14px 0 2px}
+.tier .price sup{font-size:16px;color:var(--mut);font-family:var(--mono)}
+.tier .per{font-family:var(--mono);font-size:12px;color:var(--mut)}
+.tier ul{list-style:none;margin:22px 0;display:grid;gap:10px;font-size:14.5px;color:var(--mut)}
+.tier li::before{content:"·";color:var(--blood);margin-right:8px;font-weight:700}
+.tier .btn-link{margin-top:auto;text-align:center;text-decoration:none;background:transparent;
+border:1px solid var(--line-hard);color:var(--ink);font-weight:600;font-size:15px;padding:13px 20px;border-radius:10px}
+.tier .btn-link:hover{border-color:var(--mut)}
+
+.objections{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.objections{grid-template-columns:1fr}}
+.obj{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
+.obj b{display:block;font-family:var(--serif);font-weight:400;font-size:19px;margin-bottom:7px;color:var(--ink)}
+.obj p{color:var(--mut);font-size:14.5px}
+
+footer{border-top:1px solid var(--line);padding:36px 0;color:var(--mut);font-size:13.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--mut)}
+</style>
 </head>
 <body>
 
-<header class="site"><div class="wrap">
+<header><div class="wrap nav">
   <a class="brand" href="/">
-    <span class="brandmark">P</span>
-    <span class="brandname">Patchhound<span class="brandtag">We hunt · we patch · you sleep</span></span>
+    <span class="mark">P</span>
+    <span>Patchhound<small>we hunt · we patch · you sleep</small></span>
   </a>
-  <nav class="main">
-    <a href="/" class="here">Hunt log</a>
-    <a href="/services.html">Services</a>
+  <nav class="links">
+    <a href="/hunt-log.html">Case files</a>
+    <a href="/services.html">For funded teams</a>
     <a href="/about.html">Method</a>
-    <a href="/checkup.html">Free checkup</a>
-    <a href="mailto:hello@patchhound.dev">Contact</a>
+    <a class="cta" href="#scan">Free scan</a>
   </nav>
 </div></header>
 
-<div class="wrap">
-
-<section class="hero">
-  <div class="hero-copy">
-    <div class="eyebrow">Case files open</div>
-    <h1>We find the hole, patch it, and publish <em>the diff.</em></h1>
-    <p class="lede">Patchhound is a one-hound security studio. Every fix passes a five-level verification gate before it ships. Businesses hire us for the same treatment at a flat fee: <strong>€490, findings reproduced, patches proven on your live server.</strong></p>
-    <p><a class="btn solid" href="/services.html">Get the €490 tune-up</a>&nbsp;&nbsp;<a class="btn quiet" href="#log">Read the hunt log</a></p>
-  </div>
-
-  <figure class="exhibit-file" aria-label="An actual diff from our first case file">
-    <div class="exhibit-head"><span>EXHIBIT A · CASE FILE No.001</span><span class="stamp animate">PATCHED</span></div>
-    <div class="exhibit-body"><span class="ln cm">// apps/api/src/routes/proposalRoutes.js</span><span class="ln"><span class="del">- proposalRoutes.post("/", postProposal);</span></span><span class="ln"><span class="add">+ proposalRoutes.post("/", authMiddleware, postProposal);</span></span><span class="ln cm">// unauthenticated POST closed. 401 without token,</span><span class="ln cm">// 201 with one. tests: 1/3 → 3/3.<span class="cursor"></span></span></div>
-    <figcaption style="padding:10px 18px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#7A8496;border-top:1px solid #262B36;background:#181C25">
-      Live pull request: <a style="color:#FF4D3D;text-decoration:none" href="https://github.com/SecureBananaLabs/bug-bounty/pull/12001">bug-bounty#12001 ↗</a>
-    </figcaption>
-  </figure>
-  <p class="exhibit-note">↑ every claim on this site looks like this: a command you could have run yourself.</p>
-</section>
-
-<div class="ledger" role="list" aria-label="Track record in numbers">
-<div class="wrap">
-<div class="ledger-item" role="listitem"><div class="ledger-num"><span class="count" data-count="5">5</span><span>-level</span></div><div class="ledger-label">verification gate, no exceptions</div></div>
-<div class="ledger-item" role="listitem"><div class="ledger-num"><span class="count" data-count="100">100</span>%</div><div class="ledger-label">findings reproduced before fixed</div></div>
-<div class="ledger-item" role="listitem"><div class="ledger-num"><span class="count" data-count="72">72</span>h</div><div class="ledger-label">tune-up turnaround, flat €490</div></div>
-<div class="ledger-item" role="listitem"><div class="ledger-num"><span class="count" data-count="0">0</span><span> secrets</span></div><div class="ledger-label">client work stays confidential by default</div></div>
-</div>
-</div>
-
-<div class="secline"><span class="tab">Hunt log</span></div>
-<section class="block" id="log">
-
-  <a class="case" href="/blog/002-idempotency-gaps.html">
-    <span class="stamp green">PATCHED</span>
-    <span class="no">No.002</span><div class="row"><span class="fileno">FILE No.002</span></div>
-    <h3>The bounty was already claimed. We found two bugs anyway.</h3>
-    <p class="sum">An idempotency race with a merged fix still had two real gaps: a lost-race error surfacing as a raw 500, and responses outliving their claims. Reading acceptance criteria against shipped code pays.</p>
-    <div class="meta">race conditions · payment integrity · postgres · Aug 2026</div>
-  </a>
-  <a class="case" href="/blog/001-bounty-farm.html">
-    <span class="stamp green">PATCHED</span>
-    <span class="no">No.001</span><div class="row"><span class="fileno">FILE No.001</span></div>
-    <h3>We found a repo farming AI agents with prompt injections</h3>
-    <p class="sum">A "$780 bounty program" with no way to get paid and README instructions written at AI agents. How we spotted it in thirty seconds, plus the one-line fix for the real bug inside.</p>
-    <div class="meta">auth bypass · bounty programs · prompt injection · Aug 2026</div>
-  </a>
-
-</section>
-
-<div class="secline"><span class="tab">The short version</span></div>
-<section class="block">
-  <p>Most security work asks you to trust a logo. We'd rather show you the receipts: every claim on this site traces to a public diff, a test run you can repeat, or a live request against a real server.</p>
-  <p>If your site takes form submissions, logs people in, or touches a database, it has the same class of bug we find in open source every week. The tune-up is how you find out before someone else does.</p>
-  <p style="margin-top:22px"><a class="btn solid" href="/services.html">What a tune-up covers</a></p>
-</section>
-
-<div class="secline"><span class="tab">Field notes</span></div>
-<section class="block">
-  <p>Maintaining an open source project? A free security pass from us costs you nothing but an email. We publish what we find only with your sign-off. <a href="mailto:hello@patchhound.dev?subject=Free%20security%20pass">hello@patchhound.dev</a>.</p>
-  <p style="margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pencil)">
-    RSS: <a href="/feed.xml">/feed.xml</a> · GitHub: <a href="https://github.com/iamwhitehat">iamwhitehat</a></p>
-</section>
-
-<section class="contact-band">
-  <div>
-    <h2>Your site gets the same treatment.</h2>
-    <p>Same gate, same evidence standard, applied to your endpoints within 72 hours of your first email.</p>
-  </div>
-  <a class="btn solid" href="/services.html">Start at services</a>
-</section>
-
-</div>
-
-<footer class="site"><div class="wrap">
-  <div class="cols">
+<div class="hero wrap">
+  <div class="hero-grid">
     <div>
-      <div class="fbrand">Patchhound.</div>
-      <div class="ftag">We hunt · we patch · you sleep</div>
+      <p class="kick">Free security scan · no card, no account</p>
+      <h1>You built your app in a weekend.<br>How long to <em>break in?</em></h1>
+      <p class="sub">Apps built with Cursor, Lovable or Claude forget the same things:
+      passwords left in the open, doors with no lock. Would you bet your users
+      that yours got lucky? Paste it and know in minutes.</p>
+      <div class="proof">
+        <div><b id="stat-scans">N</b><span>apps scanned</span></div>
+        <div><b>4+3</b><span>scan engines</span></div>
+        <div><b>&lt;5 min</b><span>to your verdict</span></div>
+      </div>
     </div>
-    <div class="fcol">
-      <strong>Site</strong>
-      <a href="/">Hunt log</a>
-      <a href="/blog/">All case files</a>
-      <a href="/services.html">Services</a>
-      <a href="/about.html">Method</a>
-    </div>
-    <div class="fcol">
-      <strong>Evidence</strong>
-      <a href="https://github.com/iamwhitehat">GitHub</a>
-      <a href="/feed.xml">RSS</a>
-      <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/12001">Case file PR</a>
-    </div>
-    <div class="fcol">
-      <strong>Contact</strong>
-      <a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a>
+
+    <div class="formcard" id="scan">
+      <div class="tabs">
+        <button id="tab-repo" class="on" type="button">GitHub repo</button>
+        <button id="tab-site" type="button">Live site</button>
+      </div>
+
+      <form id="form-repo" class="f">
+        <label for="repo">Public GitHub repo</label>
+        <input id="repo" type="text" placeholder="yourname/your-app" autocomplete="off" required>
+        <label for="email-r">Email for the report</label>
+        <input id="email-r" type="email" placeholder="you@yourapp.com" required>
+        <button class="submit" id="go-r" type="submit">Scan my app, free →</button>
+        <div class="msg" id="msg-r"></div>
+      </form>
+
+      <form id="form-site" class="f" hidden>
+        <label for="site-url">Your live site</label>
+        <input id="site-url" type="text" placeholder="https://yourapp.com" autocomplete="off" required>
+        <label for="email-s">Email for the report</label>
+        <input id="email-s" type="email" placeholder="you@yourapp.com" required>
+        <p class="consent"><input type="checkbox" id="consent" required>
+          <span>I own this site or am authorized to have it scanned.</span></p>
+        <button class="submit" id="go-s" type="submit">Check my live site →</button>
+        <div class="msg" id="msg-s"></div>
+      </form>
+
+      <div class="risk-reversal">
+        <strong style="color:var(--ink)">The first finding is free.</strong> If the scan
+        finds nothing dangerous, you pay nothing, ever. The clean report is the product.
+        Secrets stay hidden. Your app's name is never published.
+      </div>
     </div>
   </div>
-  <div class="legal"><span>Patchhound — evidence-based security studio</span><span>© 2026 · NL</span></div>
+
+  <div class="strip" aria-hidden="true">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      patchhound · live scan feed<span>demo output, secrets hidden</span></div>
+    <div class="feed" id="feed"></div>
+  </div>
+</div>
+
+<section><div class="wrap">
+  <p class="eyebrow">What the scan looks for</p>
+  <h2>What if the AI forgot to lock the door?</h2>
+  <p class="lede">It happens on almost every app we scan. Not because the tool is bad.
+  Because nobody taught it to think like a burglar. We do. Every scan asks what a hacker would ask:</p>
+  <div class="duo">
+    <div class="card">
+      <h3>In your code</h3>
+      <p class="tag">paste a GitHub repo</p>
+      <div class="term">
+        <b>asked</b> is a password sitting in plain sight? <span class="bad">it was.</span><br>
+        <b>asked</b> does the admin page need a login? <span class="bad">it didn't.</span><br>
+        <b>asked</b> can strangers tamper with your database? <span class="bad">they could.</span><br>
+        <span class="good">each one: a fix you can paste in</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>On your live site</h3>
+      <p class="tag">paste your URL</p>
+      <div class="term">
+        <b>asked</b> can anyone download your settings file? <span class="bad">they can.</span><br>
+        <b>asked</b> is your source code readable? <span class="bad">it is.</span><br>
+        <b>asked</b> are your admin docs open? <span class="bad">wide open.</span><br>
+        <span class="good">each one: a fix you can paste in</span>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="eyebrow">After the scan</p>
+  <h2>You'll ship code tomorrow. Who's watching then?</h2>
+  <p class="lede">Today's scan ends today. Next week's vibe-coding session can open
+  a brand-new hole, and it won't email you about it. We will.</p>
+  <div class="tiers">
+    <div class="tier">
+      <span class="per">THE SCAN</span>
+      <div class="price">Free</div><span class="per">one look, on the house</span>
+      <ul><li>Full scan of repo or site</li><li>Your verdict + worst finding, free</li><li>Clean scan? The clean bill is yours free too</li></ul>
+      <a class="btn-link" href="#scan">Start below</a>
+    </div>
+    <div class="tier hot">
+      <span class="per">FULL REPORT</span>
+      <div class="price">€13</div><span class="per">once · yours forever</span>
+      <ul><li>Every finding, exact file and line</li><li>A paste-ready fix for each one</li><li>Sleep tonight. Actually.</li></ul>
+      <a class="btn-link" href="#scan">Scan first, then unlock</a>
+    </div>
+    <div class="tier">
+      <span class="per">DAILY WATCH</span>
+      <div class="price">€49<sup>/mo</sup></div><span class="per">per app · cancel anytime</span>
+      <ul><li>Full report included day one</li><li>Re-scanned every 24 hours</li><li>New hole? You know within a day, not when it's too late</li></ul>
+      <a class="btn-link" href="#scan">Scan first, then decide</a>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="eyebrow">Fair questions</p>
+  <h2>Asked by everyone. Answered straight.</h2>
+  <p class="lede"></p>
+  <div class="objections">
+    <div class="obj"><b>Is scanning other people's repos even legal?</b>
+      <p>We only accept public repos and public URLs, and the form requires you to confirm
+      you own the target. Scanning public code for defensive purposes is standard practice;
+      exploiting anything would not be, and we never do.</p></div>
+    <div class="obj"><b>Will you tell anyone what you found in my app?</b>
+      <p>No. Reports are unlisted pages only you and we can link to. We never publish
+      client findings without written permission. Your repo name appears nowhere public.</p></div>
+    <div class="obj"><b>What if it finds nothing?</b>
+      <p>Then you get a clean bill worth having: proof that today's version of your app
+      passes every check. That's the free product working exactly as intended.</p></div>
+    <div class="obj"><b>Why should I trust prompts written about my code?</b>
+      <p>Because every finding ships with redacted evidence from your actual files, and
+      every prompt tells you how to verify the fix yourself. You are always the last gate.</p></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Patchhound · evidence-based security studio</span>
+  <span><a href="mailto:hello@patchhound.dev">hello@patchhound.dev</a> · <a href="/hunt-log.html">case files</a> · patchhound.dev</span>
 </div></footer>
 
 <script>
-/* stamp lands after paint, like it was just inked */
-window.addEventListener('load',function(){
-  document.querySelectorAll('.stamp.animate').forEach(function(s,i){
-    s.style.animationDelay=(0.25+i*0.15)+'s';
-  });
-});
-/* ledger numbers count up when scrolled into view (reduced-motion safe) */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var els=document.querySelectorAll('.ledger .count');
-  if(!els.length||!('IntersectionObserver' in window)) return;
-  var io=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(!e.isIntersecting) return;
-      io.unobserve(e.target);
-      var el=e.target, end=parseInt(el.dataset.count,10)||0, t0=null;
-      function step(ts){
-        if(!t0) t0=ts;
-        var k=Math.min((ts-t0)/900,1);
-        k=1-Math.pow(1-k,3);
-        el.textContent=Math.round(end*k);
-        if(k<1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    });
-  },{threshold:.4});
-  els.forEach(function(el){io.observe(el)});
-})();
-</script>
+const LINES = [
+  '<span class="ln">&gt; scanning <b>your-app</b> @ main …</span>',
+  '<span class="ln">live password <span class="redact">Adm••••</span>••• in <b>src/config.js:14</b></span>',
+  '<span class="ln">admin page reachable with no login <b>[critical]</b></span>',
+  '<span class="ln">database query accepts tampered input <b>[high]</b></span>',
+  '<span class="ln ok">verdict: 2 critical, 1 high. first finding is free ✓</span>'
+];
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const feed = document.getElementById('feed');
+function play(){
+  feed.innerHTML = '';
+  let i = 0;
+  const next = () => {
+    if (i >= LINES.length){ setTimeout(play, 4200); return; }
+    const d = document.createElement('div'); d.innerHTML = LINES[i++];
+    while (d.firstChild) feed.appendChild(d.firstChild);
+    setTimeout(next, i === LINES.length ? 300 : 850);
+  };
+  next();
+}
+reduced ? LINES.forEach(l => { const d=document.createElement('div'); d.innerHTML=l; while(d.firstChild) feed.appendChild(d.firstChild); })
+        : play();
 
+fetch('/stats.json').then(r=>r.json()).then(d=>{
+  const el=document.getElementById('stat-scans');
+  if(el && d.scans) el.textContent = d.scans;
+}).catch(()=>{});
+
+const tabR=document.getElementById('tab-repo'), tabS=document.getElementById('tab-site');
+const fR=document.getElementById('form-repo'), fS=document.getElementById('form-site');
+function show(repo){ fR.hidden=!repo; fS.hidden=repo;
+  tabR.classList.toggle('on',repo); tabS.classList.toggle('on',!repo);}
+tabR.onclick=()=>show(true); tabS.onclick=()=>show(false);
+
+const API="https://bronze-physiology-heating-panels.trycloudflare.com";
+fR.addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg=document.getElementById('msg-r'), btn=document.getElementById('go-r');
+  btn.disabled=true; btn.textContent='Queuing…'; msg.textContent=''; msg.className='msg';
+  try{
+    const r=await fetch(API+'/api/checkup',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({repo:document.getElementById('repo').value.trim(),
+                           email:document.getElementById('email-r').value.trim()})});
+    const d=await r.json();
+    if(r.ok){msg.classList.add('ok');msg.textContent='Queued. Scans take a few minutes; your report link is headed to your inbox.';fR.reset();}
+    else{msg.classList.add('err');msg.textContent=d.error||'Something went wrong.';}
+  }catch(_){msg.classList.add('err');msg.textContent='Could not reach the scanner. Try again shortly.';}
+  btn.disabled=false; btn.textContent='Scan my app, free →';
+});
+fS.addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg=document.getElementById('msg-s'), btn=document.getElementById('go-s');
+  btn.disabled=true; btn.textContent='Scanning…'; msg.textContent=''; msg.className='msg';
+  try{
+    const r=await fetch(API+'/api/sitescan',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({url:document.getElementById('site-url').value.trim(),
+                           email:document.getElementById('email-s').value.trim(),
+                           consent:true})});
+    const d=await r.json();
+    if(r.ok){msg.classList.add('ok');
+      msg.innerHTML='Done. Report: <a style="color:var(--stamp)" href="'+d.url+'">open it here</a>. A copy is also headed to your inbox.';
+      fS.reset();}
+    else{msg.classList.add('err');msg.textContent=d.error||'Something went wrong.';}
+  }catch(_){msg.classList.add('err');msg.textContent='Could not reach the scanner. Try again shortly.';}
+  btn.disabled=false; btn.textContent='Check my live site →';
+});
+</script>
 </body>
 </html>

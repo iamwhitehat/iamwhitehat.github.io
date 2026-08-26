@@ -3,11 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free checkup: paste your repo, get fix prompts | Patchhound</title>
-<meta name="description" content="Built your app with AI (Cursor, Lovable, Claude)? Paste your public GitHub repo and get a security checkup with copy-paste fix prompts. Free.">
+<title>Free checkup: paste your repo or URL, get fix prompts | Patchhound</title>
+<meta name="description" content="Built your app with AI (Cursor, Lovable, Claude)? Paste your public GitHub repo or your live site URL and get a security checkup with copy-paste fix prompts. Free.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
+<style>
+.mode{display:flex;gap:.5rem;margin-bottom:1.5rem}
+.mode button{background:#0d1117;color:#8b949e;border:1px solid #30363d;border-radius:99px;
+padding:.5rem 1.2rem;font-weight:600;cursor:pointer;font-size:.95rem}
+.mode button.on{background:#238636;color:#fff;border-color:#238636}
+#form-repo label small, #form-site label small{color:#8b949e;font-weight:400}
+</style>
 </head>
 <body>
 
@@ -31,20 +38,26 @@
   <h1>Your AI-built app has the same<br>wounds as every AI-built app.<br><em>Find out where yours are.</em></h1>
   <p class="lede">Cursor, Lovable and Claude build fast, and they leak the same way
   every time: API keys in client code, endpoints with no auth, SQL built from user input.
-  Paste your public repo below. You get back a plain verdict and one copy-paste
-  <strong>fix prompt per finding</strong>, ready for Cursor or Claude.</p>
+  Paste your public repo or live site below. You get back a plain verdict and one
+  copy-paste <strong>fix prompt per finding</strong>, ready for Cursor or Claude.</p>
 </section>
 
-<section class="panel" style="max-width:640px;margin:0 auto 2.5rem">
-  <form id="checkup-form">
+<div style="max-width:640px;margin:0 auto 2.5rem">
+<div class="mode">
+  <button id="tab-repo" class="on" type="button">Scan my GitHub repo</button>
+  <button id="tab-site" type="button">Scan my live site</button>
+</div>
+
+<section class="panel">
+<form id="form-repo">
     <p style="margin:.2rem 0 .9rem">
       <label for="repo" style="display:block;font-weight:600;margin-bottom:.3rem">GitHub repo (public)</label>
       <input id="repo" name="repo" placeholder="yourname/your-app" required
              style="width:100%;padding:.7rem .8rem;font-family:'JetBrains Mono',monospace;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
     </p>
     <p style="margin:.2rem 0 .9rem">
-      <label for="email" style="display:block;font-weight:600;margin-bottom:.3rem">Email for the report</label>
-      <input id="email" name="email" type="email" placeholder="you@yourapp.com" required
+      <label for="email-r" style="display:block;font-weight:600;margin-bottom:.3rem">Email for the report</label>
+      <input id="email-r" type="email" placeholder="you@yourapp.com" required
              style="width:100%;padding:.7rem .8rem;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
     </p>
     <button id="go" type="submit"
@@ -52,12 +65,35 @@
       Run my free checkup
     </button>
     <span id="msg" style="margin-left:.8rem"></span>
-  </form>
-  <p style="color:#8b949e;font-size:.85rem;margin-top:1rem">
-    Public repos only. Scan only code you have the right to scan. Secrets in the report
-    are always redacted. Limit 5 scans per day.
-  </p>
+</form>
+
+<form id="form-site" hidden>
+    <p style="margin:.2rem 0 .9rem">
+      <label for="site-url" style="display:block;font-weight:600;margin-bottom:.3rem">Your live site URL</label>
+      <input id="site-url" placeholder="https://yourapp.com" required
+             style="width:100%;padding:.7rem .8rem;font-family:'JetBrains Mono',monospace;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
+    </p>
+    <p style="margin:.2rem 0 .9rem">
+      <label for="email-s" style="display:block;font-weight:600;margin-bottom:.3rem">Email for the report</label>
+      <input id="email-s" type="email" placeholder="you@yourapp.com" required
+             style="width:100%;padding:.7rem .8rem;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:8px">
+    </p>
+    <p style="margin:.2rem 0 .9rem;font-size:.85rem;color:#c9d1d9">
+      <label><input type="checkbox" id="consent" required> I own or am authorized to scan this site</label>
+    </p>
+    <button id="go-s" type="submit"
+            style="background:#238636;color:#fff;border:none;border-radius:8px;padding:.75rem 1.4rem;font-weight:700;cursor:pointer;font-size:1rem">
+      Check my live site
+    </button>
+    <span id="msg-s" style="margin-left:.8rem"></span>
+</form>
 </section>
+
+<p style="color:#8b949e;font-size:.85rem;margin-bottom:2rem">
+  Public repos / sites you have rights to scan only. Secrets in reports are always
+  redacted. Limit 5 scans per day.
+</p>
+</div>
 
 <section style="max-width:640px;margin:0 auto 3rem">
   <h2>What you get back</h2>
@@ -66,9 +102,14 @@
     <li><strong>Fix prompts.</strong> One per finding, written to paste straight into your editor: what's wrong, exactly what to change, how to verify it worked.</li>
     <li><strong>Redacted evidence.</strong> Receipts that the finding is real, with secrets masked.</li>
   </ol>
+  <h2>Repo vs site?</h2>
+  <p>The repo scan reads source code and finds deeper wounds (injection, missing auth,
+  secrets in git history). The site scan probes what's exposed on the internet right now
+  (open .env files, visible .git folders, expired certificates, broken links). If you can,
+  run both.</p>
   <h2>Why free</h2>
-  <p>Because if we find something scary enough, some people want us to keep watching the repo
-  weekly (<strong>$49/mo</strong>) or do a full human-reviewed audit with a walkthrough call
+  <p>Because if we find something scary enough, some people want us to keep watching weekly
+  (<strong>$49/mo</strong>) or do a full human-reviewed audit with a walkthrough call
   (<strong>$299</strong>). The free scan is how you decide if we're worth it.</p>
 </section>
 
@@ -80,8 +121,17 @@
 
 <script>
 const API = "https://bronze-physiology-heating-panels.trycloudflare.com";
-const form = document.getElementById('checkup-form');
-form.addEventListener('submit', async (e) => {
+const tabR = document.getElementById('tab-repo'), tabS = document.getElementById('tab-site');
+const fR = document.getElementById('form-repo'), fS = document.getElementById('form-site');
+function show(which){
+  const repo = which === 'repo';
+  fR.hidden = !repo; fS.hidden = repo;
+  tabR.classList.toggle('on', repo); tabS.classList.toggle('on', !repo);
+}
+tabR.onclick = () => show('repo');
+tabS.onclick = () => show('site');
+
+fR.addEventListener('submit', async (e) => {
   e.preventDefault();
   const msg = document.getElementById('msg');
   const btn = document.getElementById('go');
@@ -93,14 +143,14 @@ form.addEventListener('submit', async (e) => {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         repo: document.getElementById('repo').value.trim(),
-        email: document.getElementById('email').value.trim()
+        email: document.getElementById('email-r').value.trim()
       })
     });
     const d = await r.json();
     if (r.ok) {
       msg.style.color = '#3fb950';
       msg.textContent = 'Queued! Scans take a few minutes; your report link is on its way to your inbox.';
-      form.reset();
+      fR.reset();
     } else {
       msg.style.color = '#f85149';
       msg.textContent = d.error || 'Something went wrong.';
@@ -110,6 +160,38 @@ form.addEventListener('submit', async (e) => {
     msg.textContent = 'Could not reach the scanner. Try again shortly.';
   }
   btn.disabled = false; btn.textContent = 'Run my free checkup';
+});
+
+fS.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById('msg-s');
+  const btn = document.getElementById('go-s');
+  btn.disabled = true; btn.textContent = 'Checking...';
+  msg.textContent = '';
+  try {
+    const r = await fetch(API + '/api/sitescan', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        url: document.getElementById('site-url').value.trim(),
+        email: document.getElementById('email-s').value.trim(),
+        consent: true
+      })
+    });
+    const d = await r.json();
+    if (r.ok) {
+      msg.style.color = '#3fb950';
+      msg.innerHTML = 'Done! Your report: <a style="color:#3fb950" href="' + d.url + '">open it here</a>. A copy is also headed to your inbox.';
+      fS.reset();
+    } else {
+      msg.style.color = '#f85149';
+      msg.textContent = d.error || 'Something went wrong.';
+    }
+  } catch (err) {
+    msg.style.color = '#f85149';
+    msg.textContent = 'Could not reach the scanner. Try again shortly.';
+  }
+  btn.disabled = false; btn.textContent = 'Check my live site';
 });
 </script>
 
